@@ -3,12 +3,9 @@
 {% block title %}Hello ReactController!{% endblock %}
 
 {% block body %}
-<div class="h-screen flex justify-center items-center">
-        <div class="text-center">
-            <div {{ react_component('MyComponent', { fullName: 'Alexandre' }) }}></div>
-            <h1 class="text-3xl font-bold mb-4">J'ai réalisé ce site</h1>
-            <p class="text-xl text-gray-600">En symfony et React </p>
-            <p class="text-sl text-gray-400">et tailwind évidemment </p>
-        </div>
-    </div>
+
+            <div {{ react_component('Accueil', { fullName: 'Alexandre' }) }}></div>
+            
+        
+    
 {% endblock %}
