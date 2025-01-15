@@ -25,4 +25,33 @@ return [
     '@hotwired/turbo' => [
         'version' => '7.3.0',
     ],
+    'react' => [
+        'version' => '18.3.1',
+    ],
+    'react-dom' => [
+        'version' => '18.3.1',
+    ],
+    'scheduler' => [
+        'version' => '0.23.2',
+    ],
+    '@symfony/ux-react' => [
+        'path' => './vendor/symfony/ux-react/assets/dist/loader.js',
+    ],
+    'tom-select' => [
+        'version' => '2.4.1',
+    ],
+    '@orchidjs/sifter' => [
+        'version' => '1.1.0',
+    ],
+    '@orchidjs/unicode-variants' => [
+        'version' => '1.1.2',
+    ],
+    'tom-select/dist/css/tom-select.default.min.css' => [
+        'version' => '2.4.1',
+        'type' => 'css',
+    ],
+    'tom-select/dist/css/tom-select.default.css' => [
+        'version' => '2.4.1',
+        'type' => 'css',
+    ],
 ];
