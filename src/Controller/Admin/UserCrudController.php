@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -12,20 +13,28 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserCrudController extends AbstractCrudController
 {
-    private UserPasswordHasherInterface $passwordHasher;
-
-    public function __construct(UserPasswordHasherInterface $passwordHasher)
-    {
-        $this->passwordHasher = $passwordHasher;
-    }
-    public static function getEntityFqcn(): string
-    {
-        return User::class;
-    }
+   
 
     
+    public static function getEntityFqcn(): string
+    {
+        return User::class ;
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+        ->setEntityLabelInPlural('Utilisateurs')
+        ->setEntityLabelInSingular('Utilisateur')
+
+        ->setPageTitle("index", "EcoRide - Administration des utilisateurs")
+        
+        ->setPaginatorPageSize(10)
+        ->setHelp('index', 'Lors de la création d un utilisateur depuis cette interface , l administrateur doit hasher manuellement le mot de passe ');// Ajoutez votre texte explicatif ici
+    }
     public function configureFields(string $pageName): iterable
     {
+        
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('email'),
@@ -52,6 +61,5 @@ class UserCrudController extends AbstractCrudController
             
         ];
     }
-    
     
 }

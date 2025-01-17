@@ -1,0 +1,158 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<style>
+    .FormInscription {
+        display: flex;
+        flex: 1;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    fieldset {
+        display: flex;
+        border-radius: 16px;
+        width: 680px;
+        margin-top: 200px;
+        background-color: #538460;
+        padding: 16px;
+        border: 1px solid #ccc;
+        flex-direction: column;
+    }
+
+    fieldset h2 {
+        color: aliceblue;
+        font-family: "inter";
+        font-size: 30px;
+        margin-bottom: 50px;
+        text-align: center;
+    }
+
+    .Field {
+        position: relative;
+        padding-bottom: 24px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .labelInscription {
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: black;
+    }
+
+    input,
+    select {
+        border-radius: 16px;
+        border: 1px solid #ccc;
+        height: 32px;
+        background-color: #F9E9BE;
+        padding: 0 8px;
+    }
+
+    .FieldError {
+        position: absolute;
+        bottom: -6px;
+        color: red;
+        font-size: 12px;
+    }
+
+    button {
+        padding: 12px;
+        width: 240px;
+        border-radius: 16px;
+        border: 1px solid #ccc;
+        background-color: #F9E9BE;
+        color: black;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    button:disabled {
+        border: 1px solid #999999;
+        background-color: #F9E9BE;
+        color: #666666;
+        cursor: not-allowed;
+    }
+
+    .containerInscription {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+    }
+</style>
+ <div {{ react_component('Header') }}></div>
+<div class="FormInscription">
+    <form method="post">
+        <fieldset>
+            <h2>Inscription</h2>
+            {{ form_start(registrationForm) }}
+            <div class="Field">
+                <label class="labelInscription">Nom <sup>*</sup></label>
+                {{ form_widget(registrationForm.Nom, { 'attr': { 'placeholder': 'Votre nom' } }) }}
+                {{ form_errors(registrationForm.Nom) }}
+            </div>
+
+            <div class="Field">
+                <label class="labelInscription">Prénom</label>
+                {{ form_widget(registrationForm.Prenom, { 'attr': { 'placeholder': 'Prénom' } }) }}
+                {{ form_errors(registrationForm.Prenom) }}
+            </div>
+
+            <div class="Field">
+                <label class="labelInscription">Email address <sup>*</sup></label>
+                {{ form_widget(registrationForm.email, { 'attr': { 'placeholder': 'Email' } }) }}
+                {{ form_errors(registrationForm.email) }}
+            </div>
+
+            <div class="Field">
+                <label class="labelInscription">Mot de passe <sup>*</sup></label>
+                {{ form_widget(registrationForm.plainPassword, { 'attr': { 'placeholder': 'Entrez un mot de passe sécurisé' } }) }}
+                {{ form_errors(registrationForm.plainPassword) }}
+            </div>
+
+            <div class="Field">
+                <label class="labelInscription">Localisation <sup>*</sup></label>
+                {{ form_widget(registrationForm.adresse, { 'attr': { 'placeholder': 'Entrez votre adresse' } }) }}
+                {{ form_errors(registrationForm.adresse) }}
+            </div>
+
+            <div class="Field">
+                <label class="labelInscription">Téléphone <sup>*</sup></label>
+                {{ form_widget(registrationForm .Telephone, { 'attr': { 'placeholder': 'Entrez votre numéro de téléphone' } }) }}
+                {{ form_errors(registrationForm.Telephone) }}
+            </div>
+
+            <div class="Field">
+                <label class="labelInscription">Date de naissance <sup>*</sup></label>
+                {{ form_widget(registrationForm.date_naissance, { 'attr': { 'placeholder': 'Entrez votre date de naissance' } }) }}
+                {{ form_errors(registrationForm.date_naissance) }}
+            </div>
+
+            <div class="Field">
+                <label class="labelInscription">Pseudo <sup>*</sup></label>
+                {{ form_widget(registrationForm.pseudo, { 'attr': { 'placeholder': 'Choisissez votre pseudo' } }) }}
+                {{ form_errors(registrationForm.pseudo) }}
+            </div>
+
+            <div class="Field">
+                <label class="labelInscription">Rôle <sup>*</sup></label>
+                {{ form_widget(registrationForm.roles) }}
+                {{ form_errors(registrationForm.roles) }}
+            </div>
+
+            <div class="containerInscription">
+                <button type="submit" class="btn">Créer votre compte</button>
+            </div>
+        </fieldset>
+        {{ form_end(registrationForm) }}
+    </form>
+</div>
+{% endblock %}

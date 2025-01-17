@@ -1,7 +1,8 @@
-.container {
+.containerIntro{
     display: flex;
     flex-direction: column;
     gap: 2rem; /* Espace entre les divs */
+    margin-right: 300px;
   }
   
   .left {

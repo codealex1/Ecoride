@@ -4,7 +4,7 @@ import "./intro.css";
 function Intro() {
   return (
     
-    <div class="container">
+    <div class="containerIntro">
         <div class="left">
             <p><strong>Bienvenue chez EcoRide :</strong></p>
             <p>
@@ -38,7 +38,7 @@ function Intro() {
                 </p>
                 
             </div>
-            <img src="/images/empreinte-carbone-definition-calcul-et-bilan-1492273.jpg" alt="carbone" />
+            <img src="./images/empreinte-carbone-definition-calcul-et-bilan-1492273.jpg" alt="carbone" />
         </div>
         <div class="center">
             
