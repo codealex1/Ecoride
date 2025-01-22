@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -55,6 +57,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $pseudo = null;
+
+    /**
+     * @var Collection<int, Covoiturages>
+     */
+    #[ORM\OneToMany(targetEntity: Covoiturages::class, mappedBy: 'conducteur')]
+    private Collection $covoiturages;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Avis $Avis = null;
+
+    public function __construct()
+    {
+        $this->covoiturages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -211,6 +227,52 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPseudo(string $pseudo): static
     {
         $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Covoiturages>
+     */
+    public function getCovoiturages(): Collection
+    {
+        return $this->covoiturages;
+    }
+
+    public function addCovoiturage(Covoiturages $covoiturage): static
+    {
+        if (!$this->covoiturages->contains($covoiturage)) {
+            $this->covoiturages->add($covoiturage);
+            $covoiturage->setConducteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCovoiturage(Covoiturages $covoiturage): static
+    {
+        if ($this->covoiturages->removeElement($covoiturage)) {
+            // set the owning side to null (unless already changed)
+            if ($covoiturage->getConducteur() === $this) {
+                $covoiturage->setConducteur(null);
+            }
+        }
+
+        return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->Prenom; // Retourne le nom de la marque
+    }
+
+    public function getAvis(): ?Avis
+    {
+        return $this->Avis;
+    }
+
+    public function setAvis(?Avis $Avis): static
+    {
+        $this->Avis = $Avis;
 
         return $this;
     }

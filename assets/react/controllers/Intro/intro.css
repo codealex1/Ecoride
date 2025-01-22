@@ -3,6 +3,7 @@
     flex-direction: column;
     gap: 2rem; /* Espace entre les divs */
     margin-right: 300px;
+    margin-bottom: 25vh;
   }
   
   .left {
@@ -41,7 +42,7 @@
   .center {
     font-size: 25px ;
     margin-top: 210px;
-    margin-left: 350px;
+    margin-left: 280px;
     display: flex;
     justify-content: center; /* Centre le contenu horizontalement */
     align-items: center;     /* Centre le contenu verticalement */

@@ -14,8 +14,7 @@ class Covoiturages
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $conducteur = null;
+    
 
     #[ORM\Column(length: 255)]
     private ?string $trajet = null;
@@ -26,8 +25,8 @@ class Covoiturages
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_depart = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $heure_depart = null;
+    #[ORM\Column(length: 255)]
+    private ?string $heure_depart = null;
 
     #[ORM\Column(length: 255)]
     private ?string $lieu_depart = null;
@@ -47,22 +46,18 @@ class Covoiturages
     #[ORM\Column]
     private ?float $prix_personne = null;
 
+    #[ORM\ManyToOne(inversedBy: 'covoiturages')]
+    private ?User $conducteur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'covoiturages')]
+    private ?Voiture $voiture = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getConducteur(): ?string
-    {
-        return $this->conducteur;
-    }
-
-    public function setConducteur(string $conducteur): static
-    {
-        $this->conducteur = $conducteur;
-
-        return $this;
-    }
+    
 
     public function getTrajet(): ?string
     {
@@ -100,12 +95,12 @@ class Covoiturages
         return $this;
     }
 
-    public function getHeureDepart(): ?\DateTimeInterface
+    public function getHeureDepart(): ?string
     {
         return $this->heure_depart;
     }
 
-    public function setHeureDepart(\DateTimeInterface $heure_depart): static
+    public function setHeureDepart(string $heure_depart): static
     {
         $this->heure_depart = $heure_depart;
 
@@ -180,6 +175,30 @@ class Covoiturages
     public function setPrixPersonne(float $prix_personne): static
     {
         $this->prix_personne = $prix_personne;
+
+        return $this;
+    }
+
+    public function getConducteur(): ?User
+    {
+        return $this->conducteur;
+    }
+
+    public function setConducteur(?User $conducteur): static
+    {
+        $this->conducteur = $conducteur;
+
+        return $this;
+    }
+
+    public function getVoiture(): ?Voiture
+    {
+        return $this->voiture;
+    }
+
+    public function setVoiture(?Voiture $voiture): static
+    {
+        $this->voiture = $voiture;
 
         return $this;
     }
