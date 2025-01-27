@@ -35,10 +35,22 @@ final class CovoituragesController extends AbstractController
     #[Route('/{id}', name: 'show', methods: 'GET')]
     public function show(int $id): JsonResponse
     {
+
+        
         $covoiturages = $this->repository->findOneBy(['id' => $id]);
+
+        
+        
         if ($covoiturages) {
 
-           
+            $conducteur = $covoiturages->getConducteur(); // Supposons qu'il y ait une relation définie dans l'entité Covoiturage
+            $prenomConducteur = $conducteur ? $conducteur->getPseudo() : null; 
+    
+            $vehicule = $covoiturages->getVoiture();
+            $modele = $vehicule ? $vehicule->getModele() : null;
+
+            $energie = $vehicule ? $vehicule->getEnergie() : null;
+            $marque = $vehicule && $vehicule->getMarque() ? $vehicule->getMarque()->getLibelle() : null;
 
             $responseData = [
                 'trajet' => $covoiturages->getTrajet(),
@@ -52,6 +64,11 @@ final class CovoituragesController extends AbstractController
                 'nb_place' => $covoiturages->getNbPlace(),
                 'prix_personne' => $covoiturages->getPrixPersonne(),
                 'is_active' => $covoiturages->IsActive(),
+                'preference'=>$covoiturages->getPreferences(),
+                'conducteur' => $prenomConducteur,
+                'modele' => $modele,
+                'marque' => $marque,
+                'energie' => $energie,
             ];
             return new JsonResponse($responseData, Response::HTTP_OK, []);
         }
@@ -117,6 +134,7 @@ final class CovoituragesController extends AbstractController
                 $marque = $vehicule && $vehicule->getMarque() ? $vehicule->getMarque()->getLibelle() : null;
 
                 $responseData[] = [
+                    'id'=>$covoiturage->getId(),
                     'trajet' => $covoiturage->getTrajet(),
                     'date_depart' => $covoiturage->getDateDepart()->format('Y-m-d'),
                     'heure_depart' => $covoiturage->getHeureDepart(),

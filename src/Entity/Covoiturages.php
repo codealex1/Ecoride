@@ -58,6 +58,9 @@ class Covoiturages
     #[ORM\Column(nullable: true)]
     private ?bool $IsActive = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $preferences = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -220,6 +223,28 @@ class Covoiturages
 
         return $this;
     }
+    public function addParticipant(int $userId): bool
+    {
+        // Initialiser le tableau de participants s'il est vide
+        if ($this->participant === null) {
+            $this->participant = [];
+        }
+
+        // Vérifier si l'utilisateur est déjà inscrit
+        if (in_array($userId, $this->participant)) {
+            return false; // L'utilisateur est déjà inscrit
+        }
+
+        // Vérifier si des places sont disponibles
+        if (count($this->participant) >= $this->nb_place) {
+            return false; // Plus de places disponibles
+        }
+
+        // Ajouter l'utilisateur au tableau de participants
+        $this->participant[] = $userId;
+
+        return true; // Inscription réussie
+    }
 
     public function isActive(): ?bool
     {
@@ -229,6 +254,18 @@ class Covoiturages
     public function setIsActive(?bool $IsActive): static
     {
         $this->IsActive = $IsActive;
+
+        return $this;
+    }
+
+    public function getPreferences(): ?string
+    {
+        return $this->preferences;
+    }
+
+    public function setPreferences(?string $preferences): static
+    {
+        $this->preferences = $preferences;
 
         return $this;
     }

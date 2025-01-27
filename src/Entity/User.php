@@ -81,8 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'User')]
     private Collection $avis;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $preferences = null;
+   
 
    
 
@@ -362,17 +361,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPreferences(): ?string
-    {
-        return $this->preferences;
-    }
-
-    public function setPreferences(?string $preferences): static
-    {
-        $this->preferences = $preferences;
-
-        return $this;
-    }
+    
 
     
     
