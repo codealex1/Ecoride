@@ -39,9 +39,16 @@ class Voiture
     #[ORM\OneToMany(targetEntity: Covoiturages::class, mappedBy: 'voiture')]
     private Collection $covoiturages;
 
+    #[ORM\ManyToOne(inversedBy: 'voitures')]
+    private ?User $Propriétaire = null;
+
+    
+    
+
     public function __construct()
     {
         $this->covoiturages = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -154,4 +161,20 @@ class Voiture
     {
         return $this->modele; // Retourne le nom de la marque
     }
+
+    public function getPropriétaire(): ?User
+    {
+        return $this->Propriétaire;
+    }
+
+    public function setPropriétaire(?User $Propriétaire): static
+    {
+        $this->Propriétaire = $Propriétaire;
+
+        return $this;
+    }
+
+   
+
+   
 }

@@ -1,15 +1,20 @@
-import { AppBar, Badge, Grid, IconButton, Toolbar, Button } from "@mui/material";
-import React from "react";
+import { AppBar,  Grid, Toolbar, Button } from "@mui/material";
+import React , { useEffect, useState } from "react";
 
 
 export default function Header() {
 
-    // const showHome = () => {
-    //     visit('/');
-    // }
+    const [user, setUser] = useState(null);
 
-   
-
+    useEffect(() => {
+      // Récupérer les données utilisateur injectées par Symfony
+      setUser(window.currentUser);
+    }, []);
+  
+    const isAdmin = user?.roles?.includes('ROLE_ADMIN');
+    const isUser = user?.roles?.includes('ROLE_USER');
+    const isConducteur = user?.roles.includes('ROLE_CONDUCTEUR')
+    const isPassage= user?.roles.includes('ROLE_PASSAGE')
     return (
         <AppBar position="static">
             <Toolbar style={{ background: '#538460' }}>
@@ -20,26 +25,46 @@ export default function Header() {
                             <a href="/" className="hover:text-gray-200">Accueil</a>
                             <a href="/contact" className="hover:text-gray-200">Contact</a>
                             <a href="/covoiturages" className="hover:text-gray-200">Covoiturages</a>
+
                         </nav>
                     </Grid>
 
                     {/* Section droite : Boutons Connexion et S'inscrire */}
                     <Grid item>
                         <div className="flex gap-4">
+                            {/* Boutons pour la connexion et l'inscription */}
                             <Button
-                                href="/connexion"
-                                variant="outlined text-white"
+                            href="/connexion"
+                            variant="contained"
+                            className="text-white border-white hover:bg-white hover:text-[#538460]"
+                            >
+                            Connexion
+                            </Button>
+                            <Button href="/inscription" variant="contained">
+                            S'inscrire
+                            </Button>
+
+                            {/* Bouton Espace Admin visible uniquement pour les admins */}
+                            {isAdmin && (
+                            <Button
+                                href="/admin"
+                                variant="contained"
                                 className="text-white border-white hover:bg-white hover:text-[#538460]"
                             >
-                                Connexion
+                                Espace Admin
                             </Button>
+                            )}
+
+                            {/* Bouton Espace Utilisateur visible uniquement pour les utilisateurs */}
+                            {(isUser || isConducteur || isPassage) && (
                             <Button
-                                href="/inscription"
+                                href="/EspaceUtilisateur"
                                 variant="contained"
-                                
+                                className="text-white border-white hover:bg-white hover:text-[#538460]"
                             >
-                                S'inscrire
+                                Espace Utilisateur
                             </Button>
+                            )}
                         </div>
                     </Grid>
                     

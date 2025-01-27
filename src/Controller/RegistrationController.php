@@ -4,18 +4,30 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use App\Security\LoginAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegistrationController extends AbstractController
 {
+    public function __construct(
+        private EntityManagerInterface $entityManager
+    )
+    {
+        
+    }
+
+
+
     #[Route('/inscription', name: 'app_register' )]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
@@ -30,6 +42,8 @@ class RegistrationController extends AbstractController
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
+            $user->setCredit(30);
+            
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -41,5 +55,25 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
+
+        
     }
+    #[Route('/user/update-role/{id}', name: 'update_user_role', methods: ['POST'])]
+    
+    public function updateRole(Request $request, UserRepository $userRepository, User $user): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Vérifiez si le rôle est valide
+        $newRole = $data['role'] ?? null;
+        if ($newRole && in_array($newRole, ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_PASSAGE', 'ROLE_CONDUCTEUR'])) {
+            $user->setRoles([$newRole]); // Met à jour le rôle de l'utilisateur
+            $this->entityManager->flush(); // Sauvegarde les modifications
+
+            return new JsonResponse(['message' => 'Role updated successfully']);
+        }
+
+        return new JsonResponse(['error' => 'Invalid role or missing role'], Response::HTTP_BAD_REQUEST);
+    }
+
 }

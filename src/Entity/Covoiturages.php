@@ -52,6 +52,12 @@ class Covoiturages
     #[ORM\ManyToOne(inversedBy: 'covoiturages')]
     private ?Voiture $voiture = null;
 
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $participant = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $IsActive = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -199,6 +205,30 @@ class Covoiturages
     public function setVoiture(?Voiture $voiture): static
     {
         $this->voiture = $voiture;
+
+        return $this;
+    }
+
+    public function getParticipant(): ?array
+    {
+        return $this->participant;
+    }
+
+    public function setParticipant(?array $participant): static
+    {
+        $this->participant = $participant;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->IsActive;
+    }
+
+    public function setIsActive(?bool $IsActive): static
+    {
+        $this->IsActive = $IsActive;
 
         return $this;
     }

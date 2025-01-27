@@ -24,16 +24,15 @@ class Avis
     #[ORM\Column(nullable: true)]
     private ?bool $statut = null;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'Avis')]
-    private Collection $users;
+    #[ORM\ManyToOne(inversedBy: 'avis')]
+    private ?User $User = null;
 
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-    }
+    
+
+   
+    
+
+    
 
     public function getId(): ?int
     {
@@ -76,33 +75,21 @@ class Avis
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
+    public function getUser(): ?User
     {
-        return $this->users;
+        return $this->User;
     }
 
-    public function addUser(User $user): static
+    public function setUser(?User $User): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->setAvis($this);
-        }
+        $this->User = $User;
 
         return $this;
     }
 
-    public function removeUser(User $user): static
-    {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getAvis() === $this) {
-                $user->setAvis(null);
-            }
-        }
+    
 
-        return $this;
-    }
+   
+
+    
 }

@@ -75,7 +75,7 @@ function SearchBar() {
                     <p>
                         <strong>Prix par personne:</strong> {ride.prix_personne} €
                     </p>
-                    <button className="contact-button">Contacter le conducteur</button>
+                    <button className="contact-button" >En savoir plus </button>
                 </div>
             ))}
         </div>

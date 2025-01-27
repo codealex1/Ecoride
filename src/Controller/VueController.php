@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class VueController extends AbstractController
 {
+    
     #[Route('/covoiturages', name: 'covoiturages')]
     public function index(): Response
     {

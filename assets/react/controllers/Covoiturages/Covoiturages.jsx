@@ -97,7 +97,7 @@ function Covoiturages() {
                      <p>
                         <strong>Écologique :</strong> {ride.energie === 'electrique' ? 'Oui' : 'Non'}
                     </p>
-                     <button className="contact-button">Contacter le conducteur</button>
+                     <button className="contact-button"><a href="/details">En savoir plus</a></button>
                  </div>
              ))}
          </div>

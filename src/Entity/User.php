@@ -64,12 +64,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Covoiturages::class, mappedBy: 'conducteur')]
     private Collection $covoiturages;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?Avis $Avis = null;
+    
 
+    #[ORM\Column(nullable: true)]
+    private ?int $credit = null;
+
+    /**
+     * @var Collection<int, Voiture>
+     */
+    #[ORM\OneToMany(targetEntity: Voiture::class, mappedBy: 'Propriétaire')]
+    private Collection $voitures;
+
+    /**
+     * @var Collection<int, Avis>
+     */
+    #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'User')]
+    private Collection $avis;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $preferences = null;
+
+   
+
+    
     public function __construct()
     {
         $this->covoiturages = new ArrayCollection();
+        $this->voitures = new ArrayCollection();
+        $this->avis = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -116,7 +139,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @param list<string> $roles
      */
-    public function setRoles(array $roles): static
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
@@ -265,15 +288,94 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->Prenom; // Retourne le nom de la marque
     }
 
-    public function getAvis(): ?Avis
+    
+
+    public function getCredit(): ?int
     {
-        return $this->Avis;
+        return $this->credit;
     }
 
-    public function setAvis(?Avis $Avis): static
+    public function setCredit(?int $credit): static
     {
-        $this->Avis = $Avis;
+        $this->credit = $credit;
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Voiture>
+     */
+    public function getVoitures(): Collection
+    {
+        return $this->voitures;
+    }
+
+    public function addVoiture(Voiture $voiture): static
+    {
+        if (!$this->voitures->contains($voiture)) {
+            $this->voitures->add($voiture);
+            $voiture->setPropriétaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoiture(Voiture $voiture): static
+    {
+        if ($this->voitures->removeElement($voiture)) {
+            // set the owning side to null (unless already changed)
+            if ($voiture->getPropriétaire() === $this) {
+                $voiture->setPropriétaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Avis>
+     */
+    public function getAvis(): Collection
+    {
+        return $this->avis;
+    }
+
+    public function addAvi(Avis $avi): static
+    {
+        if (!$this->avis->contains($avi)) {
+            $this->avis->add($avi);
+            $avi->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAvi(Avis $avi): static
+    {
+        if ($this->avis->removeElement($avi)) {
+            // set the owning side to null (unless already changed)
+            if ($avi->getUser() === $this) {
+                $avi->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPreferences(): ?string
+    {
+        return $this->preferences;
+    }
+
+    public function setPreferences(?string $preferences): static
+    {
+        $this->preferences = $preferences;
+
+        return $this;
+    }
+
+    
+    
+
+    
 }
