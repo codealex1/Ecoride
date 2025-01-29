@@ -112,7 +112,7 @@ final class VoitureController extends AbstractController
             
         ], Response::HTTP_CREATED);
     }
-
+    //route pour retourner toutes les voitures de l'utilisateur
     #[Route('/conducteur/{id}', name: 'user_cars', methods: 'GET')]
     public function getUserCars(int $id): JsonResponse
     {
@@ -161,6 +161,8 @@ final class VoitureController extends AbstractController
         return new JsonResponse(['message' => 'Voiture supprimée avec succès'], Response::HTTP_OK);
     }
 
+
+    //route pour récuperer tous les covoiturages où l'utilisateur conduit
     #[Route('/driver/{id}', name: 'user_covoiturages', methods: 'GET')]
     public function getUserCovoiturages(int $id): JsonResponse
     {
@@ -173,16 +175,20 @@ final class VoitureController extends AbstractController
     
        
     
-        // Récupérer tous les covoiturages
-        $allCovoiturages = $this->covoituragesRepository->findAll();
-    
+        // Récupérer tous les covoiturages où l'utilisateur est le conducteur
+        $userCovoiturages = $this->covoituragesRepository->findBy(['conducteur' => $user]);
+
+        // Vérifier si l'utilisateur a des covoiturages
+        if (empty($userCovoiturages)) {
+            return new JsonResponse(['message' => 'Aucun covoiturage trouvé pour cet utilisateur'], Response::HTTP_NOT_FOUND);
+        }
        
     
        
     
         // Préparer les données à retourner
         $covoituragesData = [];
-        foreach ($allCovoiturages as $covoiturage) {
+        foreach ($userCovoiturages as $covoiturage) {
             $covoituragesData[] = [
                 'id' => $covoiturage->getId(),
                 'trajet' => $covoiturage->getTrajet(),
@@ -196,6 +202,9 @@ final class VoitureController extends AbstractController
                 'nb_place' => $covoiturage->getNbPlace(),
                 'prix_personne' => $covoiturage->getPrixPersonne(),
                 'is_active' => $covoiturage->IsActive(),
+                "preferences" =>$covoiturage->getPreferences(),
+                'participant'=>$covoiturage->getParticipant(),
+                "is_started" =>$covoiturage->IsStarted(),
             ];
         }
     

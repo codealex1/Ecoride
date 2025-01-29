@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CovoituragesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -60,6 +62,20 @@ class Covoiturages
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $preferences = null;
+
+    /**
+     * @var Collection<int, Avis>
+     */
+    #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'covoiturages_id', cascade: ['remove'])]
+    private Collection $avis;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $IsStarted = null;
+
+    public function __construct()
+    {
+        $this->avis = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -223,6 +239,7 @@ class Covoiturages
 
         return $this;
     }
+   
     public function addParticipant(int $userId): bool
     {
         // Initialiser le tableau de participants s'il est vide
@@ -266,6 +283,48 @@ class Covoiturages
     public function setPreferences(?string $preferences): static
     {
         $this->preferences = $preferences;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Avis>
+     */
+    public function getAvis(): Collection
+    {
+        return $this->avis;
+    }
+
+    public function addAvi(Avis $avi): static
+    {
+        if (!$this->avis->contains($avi)) {
+            $this->avis->add($avi);
+            $avi->setCovoituragesId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAvi(Avis $avi): static
+    {
+        if ($this->avis->removeElement($avi)) {
+            // set the owning side to null (unless already changed)
+            if ($avi->getCovoituragesId() === $this) {
+                $avi->setCovoituragesId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isStarted(): ?bool
+    {
+        return $this->IsStarted;
+    }
+
+    public function setIsStarted(?bool $IsStarted): static
+    {
+        $this->IsStarted = $IsStarted;
 
         return $this;
     }

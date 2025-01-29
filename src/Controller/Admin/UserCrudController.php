@@ -50,6 +50,7 @@ class UserCrudController extends AbstractCrudController
                     'Admin' => 'ROLE_ADMIN',
                     'Conducteur' => 'ROLE_CONDUCTEUR',
                     'Passagé' => 'ROLE_PASSAGE',
+                    'Employé' => 'ROLE_EMPLOYE',
                     // Ajoutez d'autres rôles si nécessaire
                 ])
                 ->allowMultipleChoices() // Permet de sélectionner plusieurs rôles

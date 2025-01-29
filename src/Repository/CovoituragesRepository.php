@@ -15,7 +15,26 @@ class CovoituragesRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Covoiturages::class);
     }
-
+    public function getCovoituragesPerDay()
+    {
+        return $this->createQueryBuilder('c')
+            ->select('( c.date_depart) as date, COUNT(c.id) as count')
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+    
+    public function getRevenuesPerDay()
+    {
+        return $this->createQueryBuilder('c')
+            ->select('(c.date_depart) as date, SUM(c.prix_personne) as revenue')
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+    
     //    /**
     //     * @return Covoiturages[] Returns an array of Covoiturages objects
     //     */

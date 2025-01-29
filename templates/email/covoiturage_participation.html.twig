@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirmation de participation au covoiturage</title>
+</head>
+<body>
+    <h2>Bonjour {{ user_email }},</h2>
+    <p>Vous avez rejoint un covoiturage proposé par {{ conducteur_name }} ({{ conducteur_email }}) pour le trajet suivant :</p>
+    
+    <h3>Détails du trajet :</h3>
+    <ul>
+        <li><strong>Trajet</strong>: {{ trajet }}</li>
+        <li><strong>Date de départ</strong>: {{ date_depart }} à {{ heure_depart }} </li>
+        <li><strong>Lieu de départ :</strong>:  {{ lieu_depart }}</li>
+        <li><strong>Lieu de d'arrivée :</strong>:  {{ lieu_arrivee }}</li>
+        <li><strong>Date d'arrivée</strong>: {{ date_arrivee }} à {{ heure_arrivee }} </li>
+    </ul>
+
+    <p>Nous vous souhaitons un excellent voyage !</p>
+</body>
+</html>

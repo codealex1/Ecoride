@@ -66,12 +66,14 @@ function VoitureGrid() {
 
   return (
     <div className="voiture-grid bottom">
-      <h1 class="text-center font-bold text-[34px]">Vos Voitures</h1>
+      <h1 class="text-center font-bold text-[34px] ">Vos Voitures</h1>
 
       {voitures.length === 0 ? (
-        <p>Aucune voiture trouvée.</p>
+       <p className="text-center text-xl font-semibold text-gray-700">
+       Aucune voiture trouvé.
+     </p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {voitures.map((voiture) => (
             <div
               key={voiture.id}

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Plus de détails sur votre covoiturages{% endblock %}
+{% block title %}Votre espace employé{% endblock %}
 
 {% block body %}
 <script>
@@ -10,8 +10,7 @@
         
         roles: user.roles 
     }|json_encode|raw : 'null' }};
-     window.covoiturageId = {{ covoiturage_id|json_encode|raw }};
-     
 </script>
-<div {{ react_component('DetailVue') }}></div>
+
+<div {{ react_component ('EspaceEmploye')}}></div>
 {% endblock %}

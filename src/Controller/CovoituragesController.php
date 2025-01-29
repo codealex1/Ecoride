@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Covoiturages;
+use App\Service\MailerService;
 use App\Repository\UserRepository;
 use App\Repository\MarqueRepository;
 use App\Repository\VoitureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CovoituragesRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -32,49 +34,7 @@ final class CovoituragesController extends AbstractController
       )
       {
       }
-    #[Route('/{id}', name: 'show', methods: 'GET')]
-    public function show(int $id): JsonResponse
-    {
-
-        
-        $covoiturages = $this->repository->findOneBy(['id' => $id]);
-
-        
-        
-        if ($covoiturages) {
-
-            $conducteur = $covoiturages->getConducteur(); // Supposons qu'il y ait une relation définie dans l'entité Covoiturage
-            $prenomConducteur = $conducteur ? $conducteur->getPseudo() : null; 
     
-            $vehicule = $covoiturages->getVoiture();
-            $modele = $vehicule ? $vehicule->getModele() : null;
-
-            $energie = $vehicule ? $vehicule->getEnergie() : null;
-            $marque = $vehicule && $vehicule->getMarque() ? $vehicule->getMarque()->getLibelle() : null;
-
-            $responseData = [
-                'trajet' => $covoiturages->getTrajet(),
-                'date_depart' => $covoiturages->getDateDepart(),
-                'heure_depart' => $covoiturages->getHeureDepart(),
-                'lieu_depart' => $covoiturages->getLieuDepart(),
-                'date_arrivee' => $covoiturages->getDateArrivee(),
-                'heure_arrivee' => $covoiturages->getheureArrivee(),
-                'lieu_arrivee' => $covoiturages->getLieuArrivee(),
-                'duree' => $covoiturages->getDuree(),
-                'nb_place' => $covoiturages->getNbPlace(),
-                'prix_personne' => $covoiturages->getPrixPersonne(),
-                'is_active' => $covoiturages->IsActive(),
-                'preference'=>$covoiturages->getPreferences(),
-                'conducteur' => $prenomConducteur,
-                'modele' => $modele,
-                'marque' => $marque,
-                'energie' => $energie,
-            ];
-            return new JsonResponse($responseData, Response::HTTP_OK, []);
-        }
-
-        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
-    }
 
 
 
@@ -188,6 +148,7 @@ final class CovoituragesController extends AbstractController
         $covoiturage->setLieuArrivee($data['lieu_arrivee']);
         $covoiturage->setNbPlace((int)$data['nb_place']);
         $covoiturage->setPrixPersonne((float)$data['prix_personne']);
+        $covoiturage->setPreferences((float)$data['preferences']);
 
         // Récupérer le conducteur
         $conducteur = $userRepository->find($data['conducteur_id']);
@@ -214,14 +175,19 @@ final class CovoituragesController extends AbstractController
     
         
     #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
-    public function delete(int $id): JsonResponse
+    public function delete(int $id , MailerService $mailer): JsonResponse
     {
         // Rechercher le covoiturage à supprimer
         $covoiturage = $this->repository->find($id);
-
+        $mailer->sendCovoiturageAnnulationEmail($covoiturage);
         // Vérifier si le covoiturage existe
         if (!$covoiturage) {
             return new JsonResponse(['error' => 'Covoiturage non trouvé'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Supprimer les avis associés avant de supprimer le covoiturage
+        foreach ($covoiturage->getAvis() as $avis) {
+            $this->manager->remove($avis); // Supprimer chaque avis
         }
 
         try {
@@ -235,6 +201,7 @@ final class CovoituragesController extends AbstractController
             return new JsonResponse(['error' => 'Erreur lors de la suppression du covoiturage'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
 
     #[Route('/{id}/activate', name: 'activate_covoiturage', methods: ['POST'])]
     public function activateCovoiturage(int $id, EntityManagerInterface $entityManager): JsonResponse
@@ -310,5 +277,111 @@ final class CovoituragesController extends AbstractController
     }
 
 
+
+    #[Route('/participations', name: 'participations', methods: 'GET')]
+    public function participations(Security $security): JsonResponse
+    {
+        // Récupérer l'utilisateur connecté
+        $user = $security->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Utilisateur non authentifié'], Response::HTTP_UNAUTHORIZED);
+        }
+    
+        // Récupérer l'email (ou tout autre identifiant) de l'utilisateur
+        $userEmail = $user->getUserIdentifier();
+    
+        // Récupérer tous les covoiturages
+        $covoiturages = $this->repository->findAll();
+    
+        // Filtrer les covoiturages auxquels l'utilisateur participe
+        $filteredCovoiturages = array_filter($covoiturages, function ($covoiturage) use ($userEmail) {
+            $participants = $covoiturage->getParticipant() ?? [];
+            return in_array($userEmail, $participants);
+        });
+    
+        // Ajouter des données supplémentaires aux objets de covoiturages
+        $responseData = [];
+        foreach ($filteredCovoiturages as $covoiturage) {
+            $conducteur = $covoiturage->getConducteur();
+            $prenomConducteur = $conducteur ? $conducteur->getPseudo() : null;
+    
+            $vehicule = $covoiturage->getVoiture();
+            $modele = $vehicule ? $vehicule->getModele() : null;
+            $energie = $vehicule ? $vehicule->getEnergie() : null;
+            $marque = $vehicule && $vehicule->getMarque() ? $vehicule->getMarque()->getLibelle() : null;
+    
+            $responseData[] = [
+                'id' => $covoiturage->getId(),
+                'trajet' => $covoiturage->getTrajet(),
+                'date_depart' => $covoiturage->getDateDepart()?->format('Y-m-d'),
+                'heure_depart' => $covoiturage->getHeureDepart(),
+                'lieu_depart' => $covoiturage->getLieuDepart(),
+                'date_arrivee' => $covoiturage->getDateArrivee()?->format('Y-m-d'),
+                'heure_arrivee' => $covoiturage->getHeureArrivee(),
+                'lieu_arrivee' => $covoiturage->getLieuArrivee(),
+                'duree' => $covoiturage->getDuree(),
+                'nb_place' => $covoiturage->getNbPlace(),
+                'prix_personne' => $covoiturage->getPrixPersonne(),
+                'is_active' => $covoiturage->isActive(),
+                'preference' => $covoiturage->getPreferences(),
+                'participant' => $covoiturage->getParticipant(),
+                'conducteur' => $prenomConducteur,
+                'modele' => $modele,
+                'marque' => $marque,
+                'energie' => $energie,
+            ];
+        }
+    
+        // Retourner les données en JSON
+        return new JsonResponse($responseData, Response::HTTP_OK);
+    }
+
+    #[Route('/{id}/start', name: 'start', methods: 'POST')]
+    public function startAction($id, EntityManagerInterface $em  , MailerService $mailer)
+    {
+
+        // Récupérer le covoiturage par ID
+        $covoiturage = $em->getRepository(Covoiturages::class)->find($id);
+
+        if (!$covoiturage) {
+            return new JsonResponse(['error' => 'Covoiturage non trouvé'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Vérifier si le covoiturage est déjà démarré
+        if ($covoiturage->IsStarted()) {
+            return new JsonResponse(['error' => 'Le covoiturage a déjà démarré'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+        $mailer->sendCovoiturageDepartEmail($covoiturage);
+        // Démarrer le covoiturage (mettre à jour le champ isStarted)
+        $covoiturage->setIsStarted(true);
+        $em->flush();
+
+        return new JsonResponse(['success' => 'Covoiturage démarré avec succès']);
+    }
+
+    
+    #[Route('/{id}/finish', name: 'finish', methods: 'POST')]
+    public function finishAction($id, EntityManagerInterface $em  , MailerService $mailer)
+    {
+        // Récupérer le covoiturage par ID
+        $covoiturage = $em->getRepository(Covoiturages::class)->find($id);
+
+        if (!$covoiturage) {
+            return new JsonResponse(['error' => 'Covoiturage non trouvé'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Vérifier si le covoiturage a déjà été terminé
+        if ($covoiturage->IsStarted() === null) {
+            return new JsonResponse(['error' => 'Le covoiturage est déjà terminé'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $mailer->sendCovoiturageFinEmail($covoiturage);
+
+        // Supprimer le covoiturage de la base de données
+        $em->remove($covoiturage);
+        $em->flush();
+
+        return new JsonResponse(['success' => 'Covoiturage terminé et supprimé avec succès']);
+    }
     
 }

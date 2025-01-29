@@ -4,10 +4,17 @@ import './EspaceUtilisateur.css';
 function EspaceUtilisateur() {
 
   const [user, setUser] = useState(null);
+  const [credits, setCredits] = useState(0); // État pour les crédits
   
   useEffect(() => {
-        // Récupérer les données utilisateur injectées par Symfony
-        setUser(window.currentUser);
+    // Récupérer les données utilisateur injectées par Symfony
+    const currentUser = window.currentUser ? window.currentUser : null;
+    setUser(currentUser);
+
+    // Si l'utilisateur est connecté, récupérer ses crédits
+    if (currentUser && currentUser.credit !== undefined) {
+      setCredits(currentUser.credit);
+    }
   }, []);
 
   const Marque = [
@@ -79,7 +86,7 @@ function EspaceUtilisateur() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ role: "ROLE_CONDUCTEUR" }),
+          body: JSON.stringify({ role: ["ROLE_CONDUCTEUR" , "ROLE_PASSAGE"] }),
         }
       );
 
@@ -95,6 +102,36 @@ function EspaceUtilisateur() {
     }
   };
 
+
+  const handleConducteurPassage = async () => {
+    if (!user || !user.id) {
+      setMessage("Utilisateur non valide ou ID manquant.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://127.0.0.1:8000/user/update-role/2roles/${user.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ role: ["ROLE_CONDUCTEUR" , "ROLE_PASSAGE"] }),
+        }
+      );
+
+      if (response.ok) {
+        setMessage("Rôle mis à jour avec succès !");
+      } else {
+        const error = await response.json();
+        setMessage(`Erreur : ${error.error}`);
+      }
+    } catch (err) {
+      setMessage("Une erreur est survenue lors de la mise à jour du rôle.");
+      console.error(err);
+    }
+  };
   
 
   const handleSubmit = async (e) => {
@@ -123,6 +160,7 @@ function EspaceUtilisateur() {
       });
 
       if (response.ok) {
+        window.location.reload();
         const result = await response.json();
         setMessage(`Voiture ajoutée avec succès ! ID: ${result.voiture_id}`);
       } else {
@@ -143,9 +181,75 @@ function EspaceUtilisateur() {
     // Ensuite, appeler handleSubmit pour soumettre les données du formulaire
     await handleSubmit(e);
   };
+  const handleFormSubmit2roles = async (e) => {
+    e.preventDefault();
   
+    // Appeler handlePassage pour changer le rôle de l'utilisateur
+    await handleConducteurPassage();
+    
+    // Ensuite, appeler handleSubmit pour soumettre les données du formulaire
+    await handleSubmit(e);
+  };
+  
+
+
+  const handleAddCredit = async () => {
+    try {
+      // Appel à la route Symfony pour ajouter un crédit
+      const response = await fetch("https://127.0.0.1:8000/credit-user", {
+        method: "GET", // Ou POST selon votre configuration Symfony
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          
+          // Mettre à jour les crédits dans l'état local
+          setCredits((prevCredits) => prevCredits + 1);
+          setMessage("Crédit ajouté avec succès !");
+          window.location(reload);
+        } else {
+          setMessage("Erreur lors de l'ajout du crédit.");
+        }
+      } else {
+        setMessage("Erreur de communication avec le serveur.");
+      }
+    } catch (error) {
+     
+      console.error(error);
+    }
+  };
+
+
   return (
+    
     <div className="max-w-md mx-auto p-4 bottom">
+       <div className="max-w-md mx-auto p-4">
+      {/* Section pour afficher les crédits */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Espace Utilisateur</h1>
+        <div className="text-right">
+          <p className="text-lg font-semibold">Crédits :</p>
+          <p className="text-2xl font-bold text-green-500">{credits}</p>
+        </div>
+      </div>
+
+      {/* Bouton "Ajouter Crédit" */}
+      <div className="text-center mb-6">
+        <button
+          onClick={handleAddCredit}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Ajouter Crédit
+        </button>
+      </div>
+
+      {/* Affichage du message */}
+      {message && <p className="mt-4 text-center">{message}</p>}
+    </div>
       <h1 className="text-2xl font-bold mb-4 ml-24">Choisissez votre rôle</h1>
       <div className="flex justify-around mb-4">
         <button
@@ -160,6 +264,12 @@ function EspaceUtilisateur() {
         >
           Passager
         </button>
+        <button
+          onClick={() => handleRoleChange('conducteur/passage')}
+          className={`px-4 py-2 rounded ${role === 'conducteur/passage' ? 'bg-green-500 text-white' : 'bg-gray-200'}`}
+        >
+          Les deux ?
+        </button>
       </div>
       {role === 'passager' && (
         <div>
@@ -168,6 +278,92 @@ function EspaceUtilisateur() {
               Sélectionnez le rôle
             </button>
           </form>
+        </div>
+      )}
+      {role === 'conducteur/passage' && (
+        <div>
+          <form onSubmit={handleFormSubmit2roles } className="bg-white p-4 rounded shadow-md">
+          <h2 className="text-xl font-semibold mb-4">Informations du véhicule</h2>
+          <div className="mb-4">
+            <label className="block mb-1">Plaque d’immatriculation</label>
+            <input
+              type="text"
+              placeholder="0000-00"
+              value={immatriculation}
+              onChange={(e) => setImmatriculation(e.target.value)}
+              className="border border-gray-300 p-2 w-full rounded"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1">Date de première immatriculation</label>
+            <input
+              type="date"
+              value={date_premiere_imma}
+              onChange={(e) => setDatePremiereImma(e.target.value)}
+              className="border border-gray-300 p-2 w-full rounded"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1">Modèle du véhicule</label>
+            <textarea
+              value={modele}
+              onChange={(e) => setModele(e.target.value)}
+              className="border border-gray-300 p-2 w-full rounded"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1">Marque du véhicule</label>
+            <select
+              value={marque}
+              onChange={(e) => setMarque(e.target.value)}
+              className="border border-gray-300 p-2 w-full rounded"
+              required
+            >
+              <option value="">Sélectionner une marque</option>
+              {Marque.map((marques) => (
+                <option key={marques.id} value={marques.id}>
+                  {marques.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1">Couleur du Véhicule</label>
+            <input
+              type="text"
+              value={couleur}
+              onChange={(e) => setCouleur(e.target.value)}
+              className="border border-gray-300 p-2 w-full rounded"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1">Nombre de places disponibles</label>
+            <input
+              type="text"
+              value={nb_place}
+              onChange={(e) => setNbPlace(e.target.value)}
+              className="border border-gray-300 p-2 w-full rounded"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1">Énergie</label>
+            <input
+              type="text"
+              value={energie}
+              onChange={(e) => setEnergie(e.target.value)}
+              className="border border-gray-300 p-2 w-full rounded"
+              required
+            />
+          </div>
+          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded ml-32">
+            Sélectionnez les deux roles
+          </button>
+        </form>
         </div>
       )}
       {role === 'conducteur' && (

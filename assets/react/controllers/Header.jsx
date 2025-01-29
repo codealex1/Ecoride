@@ -15,6 +15,8 @@ export default function Header() {
     const isUser = user?.roles?.includes('ROLE_USER');
     const isConducteur = user?.roles.includes('ROLE_CONDUCTEUR')
     const isPassage= user?.roles.includes('ROLE_PASSAGE')
+    const isEmploye= user?.roles.includes('ROLE_EMPLOYE')
+
     return (
         <AppBar position="static">
             <Toolbar style={{ background: '#538460' }}>
@@ -63,6 +65,15 @@ export default function Header() {
                                 className="text-white border-white hover:bg-white hover:text-[#538460]"
                             >
                                 Espace Utilisateur
+                            </Button>
+                            )}
+                            {(isAdmin || isEmploye) && (
+                            <Button
+                                href="/employe/avis"
+                                variant="contained"
+                                className="text-white border-white hover:bg-white hover:text-[#538460]"
+                            >
+                                Espace Employé
                             </Button>
                             )}
                         </div>

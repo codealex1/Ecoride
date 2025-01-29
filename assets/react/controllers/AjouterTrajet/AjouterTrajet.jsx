@@ -15,6 +15,7 @@ function AjouterTrajet() {
     nb_place: "",
     prix_personne: "",
     voiture_id: "",
+    preferences:"",
   });
 
   const [voitures, setVoitures] = useState([]);
@@ -74,6 +75,7 @@ function AjouterTrajet() {
       "heure_arrivee",
       "prix_personne",
       "voiture_id",
+      "preferences"
     ];
 
     for (const field of requiredFields) {
@@ -234,6 +236,17 @@ function AjouterTrajet() {
                 </option>
               ))}
             </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Préférences</label>
+            <input
+              type="text"
+              name="preferences"
+              value={formData.preferences}
+              onChange={handleChange}
+              step="0.01"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            />
           </div>
           <button
             type="submit"

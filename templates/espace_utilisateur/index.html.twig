@@ -7,7 +7,7 @@
     // Vérifiez si l'utilisateur est connecté et passez les données au script
     window.currentUser  = {{ user ? {
         id: user.id,
-        
+        credit:user.credit,
         roles: user.roles 
     }|json_encode|raw : 'null' }};
 </script>

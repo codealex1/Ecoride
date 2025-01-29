@@ -129,8 +129,81 @@ function CovoituragesGrid() {
     }
   };
 
+
+  const handleStart = async (id) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`https://127.0.0.1:8000/api/covoiturages/${id}/start`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors du démarrage du covoiturage.");
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Covoiturage démarré avec succès !");
+        setCovoiturages((prev) =>
+          prev.map((covoiturage) =>
+            covoiturage.id === id ? { ...covoiturage, isStarted: true } : covoiturage
+          )
+        );
+        window.location.reload();
+      } else {
+        alert(data.error || "Une erreur est survenue.");
+      }
+    } catch (error) {
+      alert(error.message);
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
+  // Fonction pour terminer un covoiturage
+  const handleFinish = async (id) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`https://127.0.0.1:8000/api/covoiturages/${id}/finish`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la terminaison du covoiturage.");
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Covoiturage terminé avec succès !");
+        setCovoiturages((prev) =>
+          prev.map((covoiturage) =>
+            covoiturage.id === id ? { ...covoiturage, isFinished: true } : covoiturage
+          )
+        );
+        window.location.reload();
+      } else {
+        alert(data.error || "Une erreur est survenue.");
+      }
+    } catch (error) {
+      alert(error.message);
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
-    <div className="covoiturages-grid">
+    <div className="covoiturages-grid mb-32">
       <h1 className="text-center font-bold text-[34px]">Vos Covoiturages</h1>
       {loading ? (
         <p>Chargement...</p>
@@ -173,32 +246,73 @@ function CovoituragesGrid() {
                   {covoiturage.prix_personne} €
                 </p>
                 <p className="text-lg text-gray-700 mb-1">
+                  <strong>Préférences :</strong>{" "}
+                  {covoiturage.preferences} 
+                </p>
+                <p className="text-lg text-gray-700 mb-1">
                   
                   <strong>Activé :</strong> {covoiturage.is_active  ? "Oui" : "Non"} {/* Affichage du booléen */}
                 </p>
+                <p className="text-lg text-gray-700 mb-1">
+                  
+                  <strong>Démarrer :</strong> {covoiturage.is_started  ? "Oui" : "Non"} {/* Affichage du booléen */}
+                </p>
+                <p className="text-lg text-gray-700 mb-1">
+                  <strong>Participants :</strong>
+                  {covoiturage.participant && covoiturage.participant.length > 0 ? (
+                    <ul className="list-disc pl-5">
+                      {covoiturage.participant.map((participant, index) => (
+                        <li key={index}>{participant}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>Aucun participant pour ce covoiturage.</p>
+                  )}
+                </p>
+                
                 <div className="flex justify-between mt-4">
-                <button
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600"
-                  onClick={() => handleDelete(covoiturage.id)}
-                >
-                  Supprimer
-                </button>
-                {/* Condition sur l'état de isActive */}
-                {covoiturage.is_active ? (
+                  <div className="flex gap-2">
                   <button
                     className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600"
-                    onClick={() => handleDesactivate(covoiturage.id)}
+                    onClick={() => handleDelete(covoiturage.id)}
                   >
-                    Désactiver Covoiturage
+                    Supprimer
                   </button>
-                ) : (
-                  <button
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600"
-                    onClick={() => handleActivate(covoiturage.id)}
-                  >
-                    Activer Covoiturage
-                  </button>
-                )}
+
+                  {/* Condition sur l'état de isActive */}
+                  {covoiturage.is_active ? (
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600"
+                      onClick={() => handleDesactivate(covoiturage.id)}
+                    >
+                      Désactiver Covoiturage
+                    </button>
+                  ) : (
+                    <button
+                      className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600"
+                      onClick={() => handleActivate(covoiturage.id)}
+                    >
+                      Activer Covoiturage
+                    </button>
+                  )}
+                  
+                      {/* Bouton démarrer */}
+                      {!covoiturage.is_started && covoiturage.is_active ? (
+                        <button
+                          className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600"
+                          onClick={() => handleStart(covoiturage.id)}
+                        >
+                          Démarrer
+                        </button>
+                     ) : (
+                        <button
+                          className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600"
+                          onClick={() => handleFinish(covoiturage.id)}
+                        >
+                          Terminer
+                        </button>
+                      )}
+                  </div>
               </div>
               </div>
             );

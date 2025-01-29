@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Votre covoiturage est terminé </title>
+</head>
+<body>
+    <h2>Bonjour {{ email_participant }},</h2>
+    <p>Nous ésperons que votre covoiturage avec {{ conducteur_name }} ({{ conducteur_email }}) s'est bien déroulé</p>
+    
+    <h3>Détails du trajet :</h3>
+    <ul>
+        <li><strong>Trajet</strong>: {{ trajet }}</li>
+        <li><strong>Date de départ</strong>: {{ date_depart }} à {{ heure_depart }} </li>
+        <li><strong>Lieu de départ :</strong>:  {{ lieu_depart }}</li>
+        <li><strong>Lieu de d'arrivée :</strong>:  {{ lieu_arrivee }}</li>
+        <li><strong>Date d'arrivée</strong>: {{ date_arrivee }} à {{ heure_arrivee }} </li>
+    </ul>
+    <button><a href="https://127.0.0.1:8000/commentaire">Laissez un avis ! </a></button>
+    <p> A très vite !</p>
+</body>
+</html>
