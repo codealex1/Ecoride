@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre espace employé{% endblock %}
+
+{% block body %}
+<script>
+    // Vérifiez si l'utilisateur est connecté et passez les données au script
+    window.currentUser  = {{ user ? {
+        id: user.id,
+        
+        roles: user.roles 
+    }|json_encode|raw : 'null' }};
+</script>
+
+<div {{ react_component ('EspaceEmploye')}}></div>
+{% endblock %}

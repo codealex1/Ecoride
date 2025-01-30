@@ -1,0 +1,57 @@
+.containerIntro{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* Espace entre les divs */
+    margin-right: 300px;
+    margin-bottom: 25vh;
+  }
+  
+  .left {
+    font-size: 25px ;
+    margin-top: 150px;
+    margin-left: 350px;
+    text-align: left;
+    align-self: flex-start; /* Positionne à gauche */
+    width: 50%; /* Facultatif : ajuster la largeur */
+  }
+  
+  .right {
+    font-size: 25px ;
+    margin-top: 70px;
+    text-align: right;
+    align-self: flex-end; /* Positionne à droite */
+    width: 50%; /* Facultatif : ajuster la largeur */
+  }
+
+  .left2 {
+    font-size: 22px ;
+    margin-top: 150px;
+    margin-left: 350px;
+    display: flex;
+    align-items: center; /* Aligne le texte et l'image verticalement */
+    justify-content: flex-start; /* Aligne les éléments à gauche */
+    gap: 20px; /* Espacement entre le texte et l'image */
+  }
+
+  .left2 img {
+    border-radius: 10px;
+    width: 50%; /* Taille de l'image, ajustez selon vos besoins */
+    height: auto;
+  }
+
+  .center {
+    font-size: 25px ;
+    margin-top: 210px;
+    margin-left: 280px;
+    display: flex;
+    justify-content: center; /* Centre le contenu horizontalement */
+    align-items: center;     /* Centre le contenu verticalement */
+    height: 30vh;           /* Prend la hauteur complète de la fenêtre */
+    text-align: center;      /* Centre le texte à l'intérieur de l'élément */
+    padding: 20px;           /* Ajoute un peu d'espace autour du texte */
+  }
+  
+  .center p {
+    max-width: 800px;        /* Limite la largeur du texte pour qu'il ne prenne pas toute la largeur de l'écran */
+    line-height: 1.5;        /* Ajoute de l'espacement entre les lignes pour une meilleure lisibilité */
+  }

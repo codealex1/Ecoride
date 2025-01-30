@@ -1,0 +1,107 @@
+{# templates/contact/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Contactez-nous{% endblock %}
+
+{% block body %}
+<style>
+    .bg {
+       
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background-color: #538460;
+    }
+
+    .h2Contact  {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 25px;
+        color: aliceblue;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .labelContact  {
+        display: block;
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .inputContact  {
+        border-radius: 16px;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+    }
+
+    .Contactbutton {
+        width: 100%;
+        padding: 10px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .Contactbutton:hover {
+        background-color: #0056b3;
+    }
+
+    .error-message {
+        color: red;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .remember-me {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .remember-me label {
+        margin: 0; /* Supprimez la marge pour un meilleur alignement */
+    }
+</style>
+    <div {{ react_component ('Header')}}></div>
+    <div class="max-w-lg mx-auto p-6 bg-white bg rounded-lg shadow-md mt-32 mb-32">
+        <h1 class="text-2xl font-bold text-center mb-6">Contactez-nous</h1>
+
+        {% for message in app.flashes('success') %}
+            <div class="bg-green-100 text-green-700 p-3 rounded-lg mb-4">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {{ form_start(contactForm, {'attr': {'class': 'space-y-4'}}) }}
+            
+            <div>
+                {{ form_label(contactForm.name, 'Nom', {'label_attr': {'class': 'block text-white-700 font-medium'}}) }}
+                {{ form_widget(contactForm.name, {'attr': {'class': 'w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300'}}) }}
+                {{ form_errors(contactForm.name, {'attr': {'class': 'text-red-500 text-sm'}}) }}
+            </div>
+
+            <div>
+                {{ form_label(contactForm.email, 'Email', {'label_attr': {'class': 'block text-white-700 font-medium'}}) }}
+                {{ form_widget(contactForm.email, {'attr': {'class': 'w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300'}}) }}
+                {{ form_errors(contactForm.email, {'attr': {'class': 'text-red-500 text-sm'}}) }}
+            </div>
+
+            <div>
+                {{ form_label(contactForm.message, 'Message', {'label_attr': {'class': 'block text-white-700 font-medium'}}) }}
+                {{ form_widget(contactForm.message, {'attr': {'class': 'w-full px-4 py-2 border rounded-lg h-32 focus:ring focus:ring-blue-300'}}) }}
+                {{ form_errors(contactForm.message, {'attr': {'class': 'text-red-500 text-sm'}}) }}
+            </div>
+
+            <button type="submit" class="Contactbutton">
+                Envoyer
+            </button>
+
+        {{ form_end(contactForm) }}
+    </div>
+
+    <div {{ react_component ('Footer')}}></div>
+{% endblock %}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Covoiturage Annulé</title>
+</head>
+<body>
+    <h2>Bonjour,</h2>
+    <p>Le covoiturage que vous avez rejoint a été annulé. Voici les détails du trajet qui était prévu :</p>
+    
+    <h3>Détails du trajet :</h3>
+    <ul>
+        <li><strong>Conducteur</strong>: {{ conducteur_name }} ({{ conducteur_email }})</li>
+        <li><strong>Trajet</strong>: {{ trajet }}</li>
+        <li><strong>Date de départ</strong>: {{ date_depart }} à {{ heure_depart }} - Lieu de départ: {{ lieu_depart }}</li>
+        <li><strong>Date d'arrivée</strong>: {{ date_arrivee }} à {{ heure_arrivee }} - Lieu d'arrivée: {{ lieu_arrivee }}</li>
+    </ul>
+
+    <p>Nous vous prions de nous excuser pour ce contretemps.</p>
+</body>
+</html>

@@ -1,0 +1,81 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<h1>Statistiques de la plateforme</h1>
+
+
+
+<!-- Graphique du nombre de covoiturages par jour -->
+<div style="width: 80%; margin: auto; margin-top: 40px;">
+    <h2></h2>
+</div>
+<!-- Graphique des revenus de la plateforme -->
+<div style="width: 80%; margin: auto; margin-top: 40px;">
+    <h2>Revenus de la plateforme (Crédits)</h2>
+    <div id="totalCredits" style="position: absolute; top: 150px; right: 50px; font-size: 18px; font-weight: bold; background: rgba(7, 7, 7, 0.11); padding: 5px;">
+        Total des crédits dépensé: 0
+    </div>
+    <canvas id="revenuesChart"></canvas>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('/admin/covoiturages/stats')
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.covoiturages.map(item => item.date);
+                const covoiturages = data.covoiturages.map(item => item.count);
+                const revenues = data.revenues.map(item => item.revenue);
+
+                   // Calculer le total des crédits
+                const totalCredits = revenues.reduce((sum, revenue) => sum + revenue, 0);
+
+                // Afficher le total des crédits dans le div
+                const totalCreditsElement = document.getElementById('totalCredits');
+                totalCreditsElement.textContent = `Total des crédits dépensé :  ${totalCredits.toFixed(2)} €`;
+                // On s'assure que les éléments canvas sont prêts à être utilisés
+                const revenuesChartElement = document.getElementById('revenuesChart');
+                const covoiturageChartElement = document.getElementById('covoiturageChart');
+
+                // Effacer les anciens graphiques (si nécessaire)
+                new Chart(revenuesChartElement, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Revenus en crédits',
+                            data: revenues,
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            fill: false,
+                        }]
+                    }
+                });
+
+                new Chart(covoiturageChartElement, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Nombre de covoiturages',
+                            data: covoiturages,
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                             borderColor: 'rgba(54, 162, 235, 0.5)',
+                            fill: false,
+                        }]
+                    }
+                });
+            });
+    });
+</script>
+<!-- Graphique du nombre de covoiturages par jour -->
+<div style="width: 80%; margin: auto; margin-top: 40px;">
+    <h2></h2>
+</div>
+<!-- Graphique des revenus de la plateforme -->
+<div style="width: 80%; margin: auto; margin-top: 40px;">
+    <h2>Nombre de covoiturages par jour</h2>
+    <canvas id="covoiturageChart"></canvas>
+</div>
+{% endblock %}
