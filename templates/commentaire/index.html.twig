@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Laissez un commentaire !{% endblock %}
+
+{% block body %}
+<script>
+    // Vérifiez si l'utilisateur est connecté et passez les données au script
+    window.currentUser  = {{ user ? {
+        id: user.id,
+        
+        roles: user.roles 
+    }|json_encode|raw : 'null' }};
+     window.covoiturageId = {{ covoiturage_id|json_encode|raw }};
+     
+</script>
+<div {{ react_component('Header') }}></div>
+<div {{ react_component('Commentaire') }}></div>
+<div {{ react_component('Footer') }}></div>
+{% endblock %}

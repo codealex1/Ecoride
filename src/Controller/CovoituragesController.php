@@ -45,6 +45,8 @@ final class CovoituragesController extends AbstractController
         $covoiturages = $this->repository->findBy([
             'lieu_depart' => $depart,
             'lieu_arrivee' => $arrivee,
+            'IsActive' => true , 
+            'IsStarted' => null
             
         ]);
         
@@ -78,7 +80,8 @@ final class CovoituragesController extends AbstractController
             'lieu_depart' => $depart,
             'lieu_arrivee' => $arrivee,
             'date_depart' => new \DateTime($date), // Conversion de la chaîne de date en objet DateTime
-            'IsActive' => true // Filtrer uniquement les covoiturages actifs
+            'IsActive' => true ,// Filtrer uniquement les covoiturages actifs
+            'IsStarted' => null
         ]);
 
         if ($covoiturages) {
@@ -325,6 +328,7 @@ final class CovoituragesController extends AbstractController
                 'is_active' => $covoiturage->isActive(),
                 'preference' => $covoiturage->getPreferences(),
                 'participant' => $covoiturage->getParticipant(),
+                'is_started' =>$covoiturage->IsStarted(),
                 'conducteur' => $prenomConducteur,
                 'modele' => $modele,
                 'marque' => $marque,
@@ -378,7 +382,7 @@ final class CovoituragesController extends AbstractController
         $mailer->sendCovoiturageFinEmail($covoiturage);
 
         // Supprimer le covoiturage de la base de données
-        $em->remove($covoiturage);
+        $covoiturage->setIsStarted(false);
         $em->flush();
 
         return new JsonResponse(['success' => 'Covoiturage terminé et supprimé avec succès']);

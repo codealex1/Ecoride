@@ -7,18 +7,20 @@ use App\Entity\Covoiturages;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CovoituragesRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 final class DetailsController extends AbstractController
 {
     #[Route('/details/{id}', name: 'app_details')]
+    #[IsGranted('ROLE_USER')]
     public function index(int $id, CovoituragesRepository $covoituragesRepository): Response
     {
         // Récupération du covoiturage correspondant à l'ID
@@ -28,7 +30,13 @@ final class DetailsController extends AbstractController
         if (!$covoiturage) {
             throw $this->createNotFoundException('Covoiturage non trouvé.');
         }
+
+       
         $user = $this->getUser();
+        if (!$user || (!in_array('ROLE_PASSAGE', $user->getRoles()) && !in_array('ROLE_CONDUCTEUR', $user->getRoles()))) {
+            // Rediriger vers la page "Espace Utilisateur" si l'utilisateur n'a pas les rôles nécessaires
+            return $this->redirectToRoute('app_espace_utilisateur'); // Remplacer 'app_espace_utilisateur' par le nom de ta route
+        }
         // Passer les données du covoiturage à la vue
         return $this->render('details/index.html.twig', [
             'covoiturage' => $covoiturage,
@@ -46,7 +54,7 @@ final class DetailsController extends AbstractController
     }
 
     #[Route('/covoiturage/{id}/participate', name: 'covoiturage_participate', methods: ['POST'])]
-    public function participate(int $id, EntityManagerInterface $entityManager , MailerService $mailer): JsonResponse
+    public function participate(int $id, EntityManagerInterface $entityManager , MailerService $mailer , UserRepository $userRepository): JsonResponse
     {
         // Récupérer l'utilisateur connecté
         $user = $this->security->getUser();
@@ -73,6 +81,16 @@ final class DetailsController extends AbstractController
         $placesRestantes = $covoiturage->getNbPlace() - count($participants);
         if ($placesRestantes <= 0) {
             return new JsonResponse(['error' => 'Aucune place disponible'], 400);
+        }
+
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $userId]);
+        if (!$user) {
+            return new JsonResponse(['error' => 'Utilisateur non trouvé'], 404);
+        }
+
+        // Vérifier le crédit de l'utilisateur
+        if ($user->getCredit() <= 0) {
+            return new JsonResponse(['error' => 'Crédit insuffisant. Vous ne pouvez pas participer à ce covoiturage.'], 400);
         }
        
         

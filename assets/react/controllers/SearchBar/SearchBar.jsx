@@ -20,7 +20,7 @@ function SearchBar() {
     };
 
     const handleSearch = async () => {
-        const url = `https://127.0.0.1:8000/api/covoiturages/${depart}/${arrivee}`;
+        const url = `/api/covoiturages/${depart}/${arrivee}`;
 
         try {
             const response = await fetch(url);

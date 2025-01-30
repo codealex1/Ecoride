@@ -44,6 +44,7 @@ class RegistrationController extends AbstractController
 
             $user->setCredit(30);
             
+            $user->setRoles(["ROLE_USER"]);
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -58,19 +59,25 @@ class RegistrationController extends AbstractController
 
         
     }
-    #[Route('/user/update-role/{id}', name: 'update_user_role', methods: ['POST'])]
+    #[Route('/user/update-role/{id}', name: 'update_user_role_1', methods: ['POST'])]
     
     public function updateRole(Request $request, UserRepository $userRepository, User $user): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
         // Vérifiez si le rôle est valide
-        $newRole = $data['role'] ?? null;
-        if ($newRole && in_array($newRole, ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_PASSAGE', 'ROLE_CONDUCTEUR'])) {
-            $user->setRoles([$newRole]); // Met à jour le rôle de l'utilisateur
+        $newRoles = $data['role'] ?? null;
+        
+        if ($newRoles && is_array($newRoles) && 
+            in_array('ROLE_USER', $newRoles) && 
+            in_array('ROLE_PASSAGE', $newRoles)) {
+
+            // Ajoute les rôles ROLE_CONDUCTEUR et ROLE_PASSAGE à l'utilisateur
+            $user->setRoles([ 'ROLE_PASSAGE' , "ROLE_USER"]);
+            
             $this->entityManager->flush(); // Sauvegarde les modifications
 
-            return new JsonResponse(['message' => 'Role updated successfully']);
+            return new JsonResponse(['message' => 'Roles updated successfully']);
         }
 
         return new JsonResponse(['error' => 'Invalid role or missing role'], Response::HTTP_BAD_REQUEST);
@@ -89,7 +96,7 @@ class RegistrationController extends AbstractController
             in_array('ROLE_PASSAGE', $newRoles)) {
 
             // Ajoute les rôles ROLE_CONDUCTEUR et ROLE_PASSAGE à l'utilisateur
-            $user->setRoles(['ROLE_CONDUCTEUR', 'ROLE_PASSAGE']);
+            $user->setRoles(['ROLE_CONDUCTEUR', 'ROLE_PASSAGE' , "ROLE_USER"]);
             
             $this->entityManager->flush(); // Sauvegarde les modifications
 

@@ -21,7 +21,7 @@ function VoitureGrid() {
 
     const fetchVoitures = async () => {
       try {
-        const response = await fetch(`https://127.0.0.1:8000/api/voiture/conducteur/${user.id}`);
+        const response = await fetch(`/api/voiture/conducteur/${user.id}`);
         if (!response.ok) {
           throw new Error('Erreur lors du chargement des voitures');
         }
@@ -41,7 +41,7 @@ function VoitureGrid() {
   // Fonction pour supprimer une voiture
   const handleDelete = async (voitureId) => {
     try {
-      const response = await fetch(`https://127.0.0.1:8000/api/voiture/${voitureId}`, {
+      const response = await fetch(`/api/voiture/${voitureId}`, {
         method: 'DELETE',
       });
 
@@ -84,13 +84,15 @@ function VoitureGrid() {
               <p className="text-lg mb-2"><strong>Immatriculation:</strong> {voiture.immatriculation}</p>
               <p className="text-lg mb-4"><strong>Couleur:</strong> {voiture.couleur}</p>
               <p className="text-lg mb-4"><strong>Énergie:</strong> {voiture.energie}</p>
+              <div className="flex flex-col items-center mt-4">
+                <button
+                  onClick={() => handleDelete(voiture.id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded"
+                >
+                  Supprimer
+                </button>
+              </div>
               
-              <button
-                onClick={() => handleDelete(voiture.id)}
-                className="bg-red-500 text-white px-4 py-2 rounded"
-              >
-                Supprimer
-              </button>
             </div>
           ))}
         </div>

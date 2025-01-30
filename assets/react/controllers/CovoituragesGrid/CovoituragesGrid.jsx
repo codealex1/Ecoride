@@ -17,7 +17,7 @@ function CovoituragesGrid() {
     const fetchCovoiturages = async () => {
       try {
         const response = await fetch(
-          `https://127.0.0.1:8000/api/voiture/driver/${user.id}`
+          `/api/voiture/driver/${user.id}`
         );
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des covoiturages");
@@ -38,7 +38,7 @@ function CovoituragesGrid() {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer ce covoiturage ?")) {
       try {
         const response = await fetch(
-          `https://127.0.0.1:8000/api/covoiturages/delete/${id}`,
+          `/api/covoiturages/delete/${id}`,
           {
             method: "DELETE",
           }
@@ -61,7 +61,7 @@ function CovoituragesGrid() {
   const handleActivate = async (id) => {
     try {
       setLoading(true);
-      const response = await fetch(`https://127.0.0.1:8000/api/covoiturages/${id}/activate`, {
+      const response = await fetch(`/api/covoiturages/${id}/activate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -96,7 +96,7 @@ function CovoituragesGrid() {
   const handleDesactivate = async (id) => {
     try {
       setLoading(true);
-      const response = await fetch(`https://127.0.0.1:8000/api/covoiturages/${id}/deactivate`, {
+      const response = await fetch(`/api/covoiturages/${id}/deactivate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -133,7 +133,7 @@ function CovoituragesGrid() {
   const handleStart = async (id) => {
     try {
       setLoading(true);
-      const response = await fetch(`https://127.0.0.1:8000/api/covoiturages/${id}/start`, {
+      const response = await fetch(`/api/covoiturages/${id}/start`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -170,7 +170,7 @@ function CovoituragesGrid() {
   const handleFinish = async (id) => {
     try {
       setLoading(true);
-      const response = await fetch(`https://127.0.0.1:8000/api/covoiturages/${id}/finish`, {
+      const response = await fetch(`/api/covoiturages/${id}/finish`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -254,8 +254,11 @@ function CovoituragesGrid() {
                   <strong>Activé :</strong> {covoiturage.is_active  ? "Oui" : "Non"} {/* Affichage du booléen */}
                 </p>
                 <p className="text-lg text-gray-700 mb-1">
-                  
-                  <strong>Démarrer :</strong> {covoiturage.is_started  ? "Oui" : "Non"} {/* Affichage du booléen */}
+                  <strong>Démarrer :</strong> {covoiturage.is_started === null 
+                    ? "Non" 
+                    : covoiturage.is_started  
+                    ? "Oui" 
+                    : "Terminé"}
                 </p>
                 <p className="text-lg text-gray-700 mb-1">
                   <strong>Participants :</strong>
@@ -296,22 +299,25 @@ function CovoituragesGrid() {
                     </button>
                   )}
                   
-                      {/* Bouton démarrer */}
-                      {!covoiturage.is_started && covoiturage.is_active ? (
-                        <button
-                          className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600"
-                          onClick={() => handleStart(covoiturage.id)}
-                        >
-                          Démarrer
-                        </button>
-                     ) : (
-                        <button
-                          className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600"
-                          onClick={() => handleFinish(covoiturage.id)}
-                        >
-                          Terminer
-                        </button>
-                      )}
+                 {/* Bouton Démarrer */}
+                  {covoiturage.is_active && !covoiturage.is_started && (
+                    <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600"
+                      onClick={() => handleStart(covoiturage.id)}
+                    >
+                      Démarrer
+                    </button>
+                  )}
+
+                  {/* Bouton Terminer */}
+                  {covoiturage.is_active && covoiturage.is_started && (
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600"
+                      onClick={() => handleFinish(covoiturage.id)}
+                    >
+                      Terminer
+                    </button>
+                  )}
                   </div>
               </div>
               </div>

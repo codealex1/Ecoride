@@ -7,23 +7,20 @@ function Detail() {
   const covoiturageId = window.covoiturageId;
   const [user, setUser] = useState(null);
 
-   useEffect(() => {
-      setUser(window.currentUser);
-    }, []);
-
+  useEffect(() => {
+    setUser(window.currentUser);
+  }, []);
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
     const options = {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
     };
     return new Intl.DateTimeFormat('fr-FR', options).format(date);
-};
-
+  };
 
   useEffect(() => {
     if (!covoiturageId) return;
@@ -31,13 +28,18 @@ function Detail() {
     const fetchCovoiturageDetails = async () => {
       try {
         const response = await fetch(
-          `https://127.0.0.1:8000/covoiturages/${covoiturageId}`
+          `/covoiturages/${covoiturageId}`
         );
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération du covoiturage.");
         }
         const data = await response.json();
-        setCovoiturage(data);
+
+        if (data.is_started !== null ) {
+          setError("Covoiturage déjà en cours ou terminé.");
+        } else {
+          setCovoiturage(data);
+        }
       } catch (err) {
         setError(err.message);
       }
@@ -49,7 +51,7 @@ function Detail() {
   const participate = async () => {
     try {
       const response = await fetch(
-        `https://127.0.0.1:8000/covoiturage/${covoiturageId}/participate`,
+        `/covoiturage/${covoiturageId}/participate`,
         {
           method: 'POST',
           headers: {
@@ -63,8 +65,9 @@ function Detail() {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Erreur inconnue');
       }
+
       const creditResponse = await fetch(
-        `https://127.0.0.1:8000/credit/${user.id}/${covoiturageId}`,
+        `/credit/${user.id}/${covoiturageId}`,
         {
           method: 'POST',
           headers: {
@@ -79,16 +82,20 @@ function Detail() {
         throw new Error(creditErrorData.error || 'Erreur lors de l\'ajout de crédits');
       }
       const data = await response.json();
-      window.location.reload(); 
+      window.location.reload();
       setMessage(data.message);
     } catch (err) {
       setError(err.message);
     }
   };
-  
+
   return (
     <div className="covoiturage-detail mb-48 mt-32">
-      {covoiturage ? (
+      {error ? (
+        <div className="flex items-center justify-center h-screen text-4xl text-red-500 font-bold">
+          <p>{error}</p>
+        </div>
+      ) : covoiturage ? (
         <div className="card p-6 border rounded-lg shadow-lg bg-white max-w-lg mx-auto">
           <h3 className="font-bold text-2xl text-gray-800 mb-2">{covoiturage.trajet}</h3>
           <p className="text-lg text-gray-700 mb-1">
@@ -98,7 +105,7 @@ function Detail() {
             <strong>Durée :</strong> {covoiturage.duree}
           </p>
           <p className="text-lg text-gray-700 mb-1">
-            <strong>Départ :</strong>{formatDate(covoiturage.date_depart.date)}à {covoiturage.heure_depart} ({covoiturage.lieu_depart})
+            <strong>Départ :</strong>{formatDate(covoiturage.date_depart.date)} à {covoiturage.heure_depart} ({covoiturage.lieu_depart})
           </p>
           <p className="text-lg text-gray-700 mb-1">
             <strong>Arrivée :</strong> {formatDate(covoiturage.date_arrivee.date)} à {covoiturage.heure_arrivee} ({covoiturage.lieu_arrivee})
@@ -118,18 +125,16 @@ function Detail() {
           <p className="text-lg text-gray-700 mb-1">
             <strong>Préférences du conducteur:</strong> {covoiturage.preferences}
           </p>
-          {
-            covoiturage.avis_conducteur && covoiturage.avis_conducteur.length > 0 ? (
-              <p className="text-lg text-gray-700 mb-1">
-                <strong>Avis:</strong> {covoiturage.avis_conducteur.map((avis, index) => avis.commentaire).join(', ')}
-              </p>
-            ) : (
-              <p>Pas de commentaires disponibles</p>
-            )
-          }
-         <p className="text-lg text-gray-700 mb-1">
-              <strong>Note:</strong> {covoiturage.moyenne_note_conducteur}
+          {covoiturage.avis_conducteur && covoiturage.avis_conducteur.length > 0 ? (
+            <p className="text-lg text-gray-700 mb-1">
+              <strong>Avis:</strong> {covoiturage.avis_conducteur.map((avis, index) => avis.commentaire).join(', ')}
             </p>
+          ) : (
+            <p>Pas de commentaires disponibles</p>
+          )}
+          <p className="text-lg text-gray-700 mb-1">
+            <strong>Note:</strong> {covoiturage.moyenne_note_conducteur}
+          </p>
           <div className="mt-4">
             <button
               onClick={participate}

@@ -51,13 +51,13 @@ function EspaceUtilisateur() {
 
     try {
       const response = await fetch(
-        `https://127.0.0.1:8000/user/update-role/${user.id}`,
+        `/user/update-role/${user.id}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ role: "ROLE_PASSAGE" }),
+          body: JSON.stringify({ role: ["ROLE_PASSAGE" , "ROLE_USER"] }),
         }
       );
 
@@ -80,13 +80,13 @@ function EspaceUtilisateur() {
 
     try {
       const response = await fetch(
-        `https://127.0.0.1:8000/user/update-role/${user.id}`,
+        `/user/update-role/${user.id}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ role: ["ROLE_CONDUCTEUR" , "ROLE_PASSAGE"] }),
+          body: JSON.stringify({ role: ["ROLE_CONDUCTEUR" , "ROLE_PASSAGE" , "ROLE_USER"] }),
         }
       );
 
@@ -111,13 +111,13 @@ function EspaceUtilisateur() {
 
     try {
       const response = await fetch(
-        `https://127.0.0.1:8000/user/update-role/2roles/${user.id}`,
+        `/user/update-role/2roles/${user.id}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ role: ["ROLE_CONDUCTEUR" , "ROLE_PASSAGE"] }),
+          body: JSON.stringify({ role: ["ROLE_CONDUCTEUR" , "ROLE_PASSAGE" , "ROLE_USER"] }),
         }
       );
 

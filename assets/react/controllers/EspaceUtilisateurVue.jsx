@@ -29,7 +29,7 @@ export default function EspaceUtilisateurVue() {
       
       
       {(isAdmin || isConducteur) && <CovoituragesGrid />}
-      {(isAdmin || isConducteur) && <AjouterTrajet />}
+      {(isAdmin || isConducteur) && <AjouterTrajet />} <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
       <Footer />
     </>
   );

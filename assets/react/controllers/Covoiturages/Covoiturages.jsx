@@ -22,7 +22,7 @@ function Covoiturages() {
     };
 
     const handleSearch = async () => {
-        const url = `https://127.0.0.1:8000/api/covoiturages/search/${depart}/${arrivee}/${date}`;
+        const url = `/api/covoiturages/search/${depart}/${arrivee}/${date}`;
         try {
             const response = await fetch(url);
             if (!response.ok) {

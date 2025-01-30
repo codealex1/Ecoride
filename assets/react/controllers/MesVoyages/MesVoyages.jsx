@@ -17,7 +17,7 @@ function MesVoyages() {
     const fetchMesVoyages = async () => {
       try {
         const response = await fetch(
-          'https://127.0.0.1:8000/api/covoiturages/participations'
+          '/api/covoiturages/participations'
         );
         if (!response.ok) {
           throw new Error('Erreur lors de la récupération des covoiturages');
@@ -37,7 +37,7 @@ function MesVoyages() {
   const handleCancelParticipation = async (id) => {
     try {
       const response = await fetch(
-        `https://127.0.0.1:8000/covoiturage/${id}/cancel`,
+        `/covoiturage/${id}/cancel`,
         {
           method: 'POST',
           headers: {
@@ -50,7 +50,7 @@ function MesVoyages() {
         throw new Error('Erreur lors de l\'annulation de la participation');
       }
       const creditResponseAdd = await fetch(
-        `https://127.0.0.1:8000/credit/${user.id}/${covoiturageId}/add`,
+        `/credit/${user.id}/${covoiturageId}/add`,
         {
           method: 'POST',
           headers: {
@@ -124,12 +124,39 @@ function MesVoyages() {
               <p className="text-lg text-gray-700 mb-1">
                 <strong>Carburant:</strong> {covoiturage.energie}
               </p>
-              <button
-                onClick={() => handleCancelParticipation(covoiturage.id)}
-                className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-              >
-                Ne plus Participer
-              </button>
+              <p className="text-lg text-gray-700 mb-1">
+                  <strong>Démarrer :</strong> {covoiturage.is_started === null 
+                    ? "Non" 
+                    : covoiturage.is_started 
+                    ? "Oui" 
+                    : "Terminé"}
+                </p>
+                <div className="flex flex-col items-center mt-4">
+                  {covoiturage.is_started === null ? (
+                    // Le covoiturage n'a pas encore commencé → Bouton "Ne plus Participer"
+                    <button
+                      onClick={() => handleCancelParticipation(covoiturage.id)}
+                      className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                    >
+                      Ne plus Participer
+                    </button>
+                  ) : covoiturage.is_started  ? (
+                    // Le covoiturage est en cours → Afficher "Covoiturage en cours..."
+                    <p className="text-lg font-semibold text-gray-700">Covoiturage en cours...</p>
+                  ) : (
+                    // Le covoiturage est terminé → Afficher le message + bouton "Laissez un avis"
+                    <div className="text-center">
+                      <p className="text-lg font-semibold text-gray-700">Covoiturage terminé</p>
+                      <button
+                        className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                      >
+                        <a href={`/commentaire/${covoiturage.id}`}>Laissez un avis</a>
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+
             </div>
           ))}
         </div>

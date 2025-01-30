@@ -12,7 +12,7 @@ function Avis() {
 
   const fetchAvis = async () => {
     try {
-      const response = await fetch("https://127.0.0.1:8000/employe/avis/all");
+      const response = await fetch("/employe/avis/all");
       if (!response.ok) {
         throw new Error("Erreur lors de la récupération des avis");
       }
@@ -25,7 +25,7 @@ function Avis() {
 
   const handleActivate = async (id) => {
     try {
-      const response = await fetch(`https://127.0.0.1:8000/employe/avis/update/${id}`, {
+      const response = await fetch(`/employe/avis/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +47,7 @@ function Avis() {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`https://127.0.0.1:8000/employe/avis/delete/${id}`, {
+      const response = await fetch(`/employe/avis/delete/${id}`, {
         method: "DELETE",
       });
 

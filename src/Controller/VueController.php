@@ -83,6 +83,7 @@ final class VueController extends AbstractController
                 'prix_personne' => $covoiturages->getPrixPersonne(),
                 'is_active' => $covoiturages->IsActive(),
                 'preferences'=>$covoiturages->getPreferences(),
+                'is_started' =>$covoiturages->IsStarted(),
                 'conducteur' => $prenomConducteur,
                 'modele' => $modele,
                 'marque' => $marque,

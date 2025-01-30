@@ -35,7 +35,7 @@ function AjouterTrajet() {
 
     const fetchVoitures = async () => {
       try {
-        const response = await fetch(`https://127.0.0.1:8000/api/voiture/conducteur/${user.id}`);
+        const response = await fetch(`/api/voiture/conducteur/${user.id}`);
         if (!response.ok) {
           throw new Error("Erreur lors du chargement des voitures");
         }
@@ -86,7 +86,7 @@ function AjouterTrajet() {
     }
 
     try {
-      const response = await fetch("https://127.0.0.1:8000/api/covoiturages/add", {
+      const response = await fetch("/api/covoiturages/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
