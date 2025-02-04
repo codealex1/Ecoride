@@ -80,7 +80,7 @@ function EspaceUtilisateur() {
 
     try {
       const response = await fetch(
-        `/user/update-role/${user.id}`,
+        `/user/update-role/conducteur${user.id}`,
         {
           method: "POST",
           headers: {

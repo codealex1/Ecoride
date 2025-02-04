@@ -82,6 +82,29 @@ class RegistrationController extends AbstractController
 
         return new JsonResponse(['error' => 'Invalid role or missing role'], Response::HTTP_BAD_REQUEST);
     }
+    #[Route('/user/update-role/conducteur{id}', name: 'update_user_role_1', methods: ['POST'])]
+    
+    public function updateRoleConducteur(Request $request, UserRepository $userRepository, User $user): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Vérifiez si le rôle est valide
+        $newRoles = $data['role'] ?? null;
+        
+        if ($newRoles && is_array($newRoles) && 
+            in_array('ROLE_USER', $newRoles) && 
+            in_array('ROLE_CONDUCTEUR', $newRoles)) {
+
+            // Ajoute les rôles ROLE_CONDUCTEUR et ROLE_PASSAGE à l'utilisateur
+            $user->setRoles([ 'ROLE_CONDUCTEUR' , "ROLE_USER"]);
+            
+            $this->entityManager->flush(); // Sauvegarde les modifications
+
+            return new JsonResponse(['message' => 'Roles updated successfully']);
+        }
+
+        return new JsonResponse(['error' => 'Invalid role or missing role'], Response::HTTP_BAD_REQUEST);
+    }
 
     #[Route('/user/update-role/2roles/{id}', name: 'update_user_role', methods: ['POST'])]
     public function updateRoleAll(Request $request, UserRepository $userRepository, User $user): JsonResponse
