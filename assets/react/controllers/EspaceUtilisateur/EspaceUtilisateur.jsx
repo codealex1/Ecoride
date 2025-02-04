@@ -18,12 +18,16 @@ function EspaceUtilisateur() {
   }, []);
 
   const Marque = [
-    { id: 1, name: 'Ferrari' },
-    { id: 2, name:  'Tesla' },
-    { id: 3, name: 'Renault' },
-    { id: 4, name: 'Volkswagen' },
-    { id: 5, name: 'Mercedes' },
-    { id: 6, name: 'BMW' },
+    { id: 1, name: 'Renault' },
+    { id: 2, name:  'Ferrari' },
+    { id: 3, name: 'Tesla' },
+    { id: 4, name: 'Peugeot' },
+    { id: 5, name: 'Volkswagen' },
+    { id: 6, name: 'Citroën' },
+    { id: 7, name: 'Mercedes' },
+    { id: 8, name: 'BMW' },
+    { id: 9, name: 'Audi' },
+    { id: 10, name: 'Toyota' },
     // Ajoutez d'autres marques ici
   ];
 
