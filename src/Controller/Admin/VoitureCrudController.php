@@ -27,7 +27,7 @@ class VoitureCrudController extends AbstractCrudController
             TextField::new('couleur', 'Couleur'),
             TextField::new('date_premiere_imma', 'Date Première Immatriculation'),
             AssociationField::new('marque', 'Marque'), 
-            AssociationField::new('propriétaire_id', 'Propriétaire'),// Relation Many-to-One avec Marque
+            AssociationField::new('propriétaire', 'Propriétaire'),// Relation Many-to-One avec Marque
         ];
     }
     
