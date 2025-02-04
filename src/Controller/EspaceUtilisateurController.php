@@ -32,7 +32,7 @@ final class EspaceUtilisateurController extends AbstractController
             $entityManager->flush();
 
             // Retourner une réponse confirmant l'action
-            return new Response('L\'utilisateur a été crédité d\'un crédit.');
+            return new Response('L utilisateur a été crédité dun crédit.');
         }
 
         // Si l'utilisateur n'est pas connecté
