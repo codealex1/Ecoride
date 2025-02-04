@@ -151,7 +151,7 @@ function EspaceUtilisateur() {
 
     try {
       // Envoi des données au contrôleur via une requête POST
-      const response = await fetch('https://127.0.0.1:8000/api/voiture/add', {
+      const response = await fetch('/api/voiture/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ function EspaceUtilisateur() {
   const handleAddCredit = async () => {
     try {
       // Appel à la route Symfony pour ajouter un crédit
-      const response = await fetch("https://127.0.0.1:8000/credit-user", {
+      const response = await fetch("/credit-user", {
         method: "GET", // Ou POST selon votre configuration Symfony
         headers: {
           "Content-Type": "application/json",
