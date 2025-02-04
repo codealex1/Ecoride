@@ -1,0 +1,1 @@
+insert into user (nom , prenom , telephone , adresse , date_naissance , pseudo , credit , email , password , roles) values ("alex", "brunet" , 07827398797 , "bordeaux" , "07/05/2005", "alex" , 30000, "alexandrebrunet4600@gmail.com" , "$2y$13$GB3.UtORHwKPU0ba2keEvOD5OaRnpFete4LKt5hiGSctEVfsieC/2",'[ "ROLE_ADMIN"]');
