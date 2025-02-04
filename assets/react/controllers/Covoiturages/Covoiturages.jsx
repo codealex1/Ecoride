@@ -45,7 +45,7 @@ function Covoiturages() {
 
     return (
         <div>
-            <img className='imgBack' src="./images/carte2.png" alt="carte" />
+            <img className='imgBack' src="./images/cartefond.png" alt="carte" />
             <h1 className='h1-search-co '><strong>Trouvez votre itinéraire rapidement !</strong></h1>
             <div className="search-bar-co search-bar">
                 <input
