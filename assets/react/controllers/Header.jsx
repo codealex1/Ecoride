@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import "../styles/Header.css"; // Importation du fichier CSS
+import "../../styles/Header.css"; // Importation du fichier CSS
 
 export default function Header() {
     const [user, setUser] = useState(null);
