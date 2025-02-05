@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Button, IconButton, Drawer, List, ListItem, ListItemText } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import MenuIcon from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 
 export default function Header() {

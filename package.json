@@ -34,6 +34,7 @@
         "@heroicons/react": "^2.2.0",
         "@hotwired/stimulus": "^3.2.2",
         "@material-tailwind/react": "^2.1.10",
+        "@mui/icons-material": "^6.4.3",
         "@mui/material": "^6.4.0",
         "add": "^2.0.6",
         "react": "^18.3.1",
