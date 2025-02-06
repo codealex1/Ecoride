@@ -67,7 +67,7 @@ Une fois les dépendances installées , exécuter la commande php -S 127.0.0.1:8
 
 
 
-**Trello** : <span style="color:red">: https://trello.com/b/Gj4oYQbu/ecf</span>
+**Trello** : <span style="color:red">: [https://trello.com/b/Gj4oYQbu/ecf](https://trello.com/b/ZK58zW7X/initialisation-de-react-dans-symfony-gestion-des-erreurs-de-la-74)</span>
 
 
 
@@ -116,8 +116,8 @@ Une fois les dépendances installées , exécuter la commande php -S 127.0.0.1:8
 
 
 ### Lien maquette figma 
-https://www.figma.com/design/vLxKUCmQPCtjBBuBlrYluY/Maquette-%2B-charte-graphique-Arcadia?node-id=23-42&m=dev&t=8epX7KkYrVjla5pz-1
 
+https://www.figma.com/design/SBp5kmT7CW95KckwjWMitA/EcoRide?node-id=0-1&p=f&t=CiW7Zuz8xbxugoSy-0
 
 
 
