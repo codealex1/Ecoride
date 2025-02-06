@@ -25,7 +25,7 @@ export default function EspaceUtilisateurVue() {
       <EspaceUtilisateur />
       {(isAdmin || isPassage || isConducteur ) && <VoitureGrid />}
 
-      {(isAdmin || isPassage) && <MesVoyages />}
+      {(isAdmin || isPassage || isConducteur) && <MesVoyages />}
       
       
       {(isAdmin || isConducteur) && <CovoituragesGrid />}
