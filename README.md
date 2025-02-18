@@ -35,6 +35,9 @@ Nous vous demandons de vous mettre en situation d’examen. Prenez le temps de l
     Adresse email employé      : employe@Ecorideemploye.com
     Mot de passe employé       : Employe123!
 
+    Adresse email utilisateur de test      : exempleUtilisateur1.com
+    Mot de passe        : exemple1
+
    
 
 ## Réflexion et configuration de l'environement de travail 
