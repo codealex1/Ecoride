@@ -134,4 +134,4 @@ https://www.figma.com/design/SBp5kmT7CW95KckwjWMitA/EcoRide?node-id=0-1&p=f&t=Ci
 
 ### Code SQL 
 
-création de l'admin : insert into user (nom , prenom , telephone , adresse , date_naissance, pseudo , credit , email , password , roles) values ("LeParfaitEmployé", "Tom", 0606060606 , "Paris" , "02/09/1989" ,"Employé" , 30 , "employe@Ecorideemploye.com", "test" , '["ROLE_EMPLOYE"]');
+création de l'admin : insert into user (nom , prenom , telephone , adresse , date_naissance, pseudo , credit , email , password , roles) values ("ecoride", "jose", 0606060606 , "Paris" , "01/01/1964" ,"JOSEadmin" , 30000 , "admin@joseEcoride.com", "$2y$13$qgq1InV4ux9VuRVSw9lUiOc969VhaOYXXmTeWkbv2NipXS1E3rrGG" , '["ROLE_ADMIN"]');
