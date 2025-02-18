@@ -99,20 +99,17 @@ Une fois les dépendances installées , exécuter la commande php -S 127.0.0.1:8
 ## Diagramme des Cas d'utilisations
 
 <br />
+![CasUtilisation1](https://github.com/user-attachments/assets/3db6dd11-7082-44bc-be64-83f0ff5dbd80)
+![CasUtilisation2](https://github.com/user-attachments/assets/3704cdd5-1ec8-426a-afa8-fd5e72db4650)
+![CasUtilisation3](https://github.com/user-attachments/assets/67041487-b6d2-4d80-9baf-f9de8c444fab)
 
-![Modélisation des données](cas_utilisation1.png)
-![Modélisation des données](cas_utilisation2.png)
-![Modélisation des données](cas_utilisation3.png)
-![Modélisation des données](cas_utilisation4.png)
-![Modélisation des données](cas_utilisation5.png)
-![Modélisation des données](cas_utilisation6.png)
 
 <br /><br />
 
 <br /><br />
 ## Modélisation des données
 
-![Modélisation des données]![baseDonnées](https://github.com/user-attachments/assets/5d0bcce1-f271-4a05-8e51-738e13669fae)
+(https://github.com/user-attachments/assets/5d0bcce1-f271-4a05-8e51-738e13669fae)
 
 
 
