@@ -106,7 +106,8 @@ Une fois les dépendances installées , exécuter la commande php -S 127.0.0.1:8
 
 <br /><br />
 
-<br /><br />
+<br /><br />![CasUtilisation3](https://github.com/user-attachments/assets/adf28ee3-6c09-42c7-8496-dac25660e92c)
+
 ## Modélisation des données
 
 ![Modélisation des données](https://github.com/user-attachments/assets/5d0bcce1-f271-4a05-8e51-738e13669fae)
