@@ -64,6 +64,14 @@ Créer un fichier .env.local et configurer l'url de votre base de donée et de v
 Exécutez les commandes doctrine:make:migration et migration:migrate
 Une fois les dépendances installées , exécuter la commande php -S 127.0.0.1:8000 -t public ou symfony serve pour lancer le projet.
 
+### Guide d'utilisation :
+
+Par défault un visiteur peut rechercher des covoiturages depuis la page d'accueil et covoiturages mais ne peux accèder aux détails et participer. 
+Créez-vous un compte et allez dans l'éspace utilisateur pour sélectionné votre rôle (choissisez "les deux" dès le départ pour ne pas avoir à re changer lorsque vous voudrez participer à un covoiturages).
+Le rôle passagé vous  permet de participer aux covoiturages tandis que le rôle conducteur vous permet dans ajouter et d'activer ou non le covoiturage afin qu'il soit visible sur la plateforme.
+Lorsqu'un utilisateur participe à votre covoiturages vous recevrez un mail , de même lorsque vous annulez un covoiturages les participants sont avertis.
+À la fin d'un covoiturage les participants recoivent un mail leur proposant de laisser un avis sur le conducteur. Les avis doivent être validé par un employe depuis son espace afin d'apparaitre dans les détails des prochains covoiturages du conducteur en question.
+Vous pouvez visionné tous les instances des entités depuis l'espace administrateur et visualiser les revenues de la plateforme en temps réel.
 
 
 
