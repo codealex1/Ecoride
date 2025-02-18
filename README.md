@@ -87,13 +87,13 @@ Vous pouvez visionné tous les instances des entités depuis l'espace administra
 
 - **Serveur:**
     + Apache
-    + PHP 8.1
-    + MySQL 8.1 / PDO
+    + PHP 8.6
+    + MySQL 10.6 / PDO
 
 
 - **Backend (API)**
     + PHP 8.1
-    + MySQL 8.0 / PDO
+    + MySQL 8.0.32 / PDO
     + Symfony 7
 
 
