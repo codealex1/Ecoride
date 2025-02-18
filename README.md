@@ -104,7 +104,8 @@ Une fois les dépendances installées , exécuter la commande php -S 127.0.0.1:8
 ![CasUtilisation3](https://github.com/user-attachments/assets/450822d6-ef44-4157-81fb-c46fa8c4b065)
 
 
-<br /><br />
+<br /><br />![CasUtilisation1](https://github.com/user-attachments/assets/b320b8d4-aa33-4984-8eeb-98b83c09aaa9)
+
 
 <br /><br />
 
