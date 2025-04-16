@@ -41,8 +41,10 @@
 
     .labelInscription {
         margin-bottom: 8px;
-        font-size: 14px;
-        color: black;
+        font-size: 18px;
+        font-family: "inter";
+        font-style: bold; 
+        color: white;
     }
 
     input,
@@ -96,7 +98,7 @@
             <h2>Inscription</h2>
             {{ form_start(registrationForm) }}
             <div class="Field">
-                <label class="labelInscription">Nom <sup>*</sup></label>
+                <label class="labelInscription">Nom <sup></sup></label>
                 {{ form_widget(registrationForm.Nom, { 'attr': { 'placeholder': 'Votre nom' } }) }}
                 {{ form_errors(registrationForm.Nom) }}
             </div>
@@ -108,37 +110,37 @@
             </div>
 
             <div class="Field">
-                <label class="labelInscription">Email address <sup>*</sup></label>
+                <label class="labelInscription">Email address <sup></sup></label>
                 {{ form_widget(registrationForm.email, { 'attr': { 'placeholder': 'Email' } }) }}
                 {{ form_errors(registrationForm.email) }}
             </div>
 
             <div class="Field">
-                <label class="labelInscription">Mot de passe <sup>*</sup></label>
+                <label class="labelInscription">Mot de passe <sup></sup></label>
                 {{ form_widget(registrationForm.plainPassword, { 'attr': { 'placeholder': 'Entrez un mot de passe sécurisé' } }) }}
                 {{ form_errors(registrationForm.plainPassword) }}
             </div>
 
             <div class="Field">
-                <label class="labelInscription">Localisation <sup>*</sup></label>
+                <label class="labelInscription">Localisation <sup></sup></label>
                 {{ form_widget(registrationForm.adresse, { 'attr': { 'placeholder': 'Entrez votre adresse' } }) }}
                 {{ form_errors(registrationForm.adresse) }}
             </div>
 
             <div class="Field">
-                <label class="labelInscription">Téléphone <sup>*</sup></label>
+                <label class="labelInscription">Téléphone <sup></sup></label>
                 {{ form_widget(registrationForm .Telephone, { 'attr': { 'placeholder': 'Entrez votre numéro de téléphone' } }) }}
                 {{ form_errors(registrationForm.Telephone) }}
             </div>
 
             <div class="Field">
-                <label class="labelInscription">Date de naissance <sup>*</sup></label>
+                <label class="labelInscription">Date de naissance <sup></sup></label>
                 {{ form_widget(registrationForm.date_naissance, { 'attr': { 'placeholder': 'Entrez votre date de naissance' } }) }}
                 {{ form_errors(registrationForm.date_naissance) }}
             </div>
 
             <div class="Field">
-                <label class="labelInscription">Pseudo <sup>*</sup></label>
+                <label class="labelInscription">Pseudo <sup></sup></label>
                 {{ form_widget(registrationForm.pseudo, { 'attr': { 'placeholder': 'Choisissez votre pseudo' } }) }}
                 {{ form_errors(registrationForm.pseudo) }}
             </div>

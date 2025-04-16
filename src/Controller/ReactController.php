@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ReactController extends AbstractController
 {
-    #[Route('/', name: 'app_react')]
+    #[Route('/', name: 'app_home')]
     public function index(): Response
     {
         $user = $this->getUser();

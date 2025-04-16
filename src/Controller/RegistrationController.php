@@ -29,7 +29,7 @@ class RegistrationController extends AbstractController
 
 
     #[Route('/inscription', name: 'app_register' )]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -39,7 +39,7 @@ class RegistrationController extends AbstractController
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
+            // hash le mot de passe avant de le stocker 
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $user->setCredit(30);
@@ -48,7 +48,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // do anything else you need here, like send an email
+            
 
             return new RedirectResponse($this->generateUrl('app_login'));
         }
@@ -59,74 +59,34 @@ class RegistrationController extends AbstractController
 
         
     }
-    #[Route('/user/update-role/{id}', name: 'update_user_role_1', methods: ['POST'])]
-    
+    #[Route('/user/update-role/{id}', name: 'update_user_role', methods: ['POST'])]
     public function updateRole(Request $request, UserRepository $userRepository, User $user): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+        $newRoles = $data['role'] ?? null;
 
         // Vérifiez si le rôle est valide
-        $newRoles = $data['role'] ?? null;
-        
-        if ($newRoles && is_array($newRoles) && 
-            in_array('ROLE_USER', $newRoles) && 
-            in_array('ROLE_PASSAGE', $newRoles)) {
+        if ($newRoles && is_array($newRoles)) {
+            // Vérifiez les rôles et définissez les rôles appropriés
+            if (in_array('ROLE_USER', $newRoles)) {
+                if (in_array('ROLE_CONDUCTEUR', $newRoles) && in_array('ROLE_PASSAGE', $newRoles)) {
+                    // Ajoute les rôles ROLE_CONDUCTEUR, ROLE_PASSAGE et ROLE_USER à l'utilisateur
+                    $user->setRoles(['ROLE_CONDUCTEUR', 'ROLE_PASSAGE', 'ROLE_USER']);
+                } elseif (in_array('ROLE_PASSAGE', $newRoles)) {
+                    // Ajoute les rôles ROLE_PASSAGE et ROLE_USER à l'utilisateur
+                    $user->setRoles(['ROLE_PASSAGE', 'ROLE_USER']);
+                } elseif (in_array('ROLE_CONDUCTEUR', $newRoles)) {
+                    // Ajoute les rôles ROLE_CONDUCTEUR et ROLE_USER à l'utilisateur
+                    $user->setRoles(['ROLE_CONDUCTEUR', 'ROLE_USER']);
+                } else {
+                    return new JsonResponse(['error' => 'Invalid role combination'], Response::HTTP_BAD_REQUEST);
+                }
 
-            // Ajoute les rôles ROLE_CONDUCTEUR et ROLE_PASSAGE à l'utilisateur
-            $user->setRoles([ 'ROLE_PASSAGE' , "ROLE_USER"]);
-            
-            $this->entityManager->flush(); // Sauvegarde les modifications
-
-            return new JsonResponse(['message' => 'Roles updated successfully']);
-        }
-
-        return new JsonResponse(['error' => 'Invalid role or missing role'], Response::HTTP_BAD_REQUEST);
-    }
-    #[Route('/user/update-role/conducteur{id}', name: 'update_user_role_1', methods: ['POST'])]
-    
-    public function updateRoleConducteur(Request $request, UserRepository $userRepository, User $user): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-
-        // Vérifiez si le rôle est valide
-        $newRoles = $data['role'] ?? null;
-        
-        if ($newRoles && is_array($newRoles) && 
-            in_array('ROLE_USER', $newRoles) && 
-            in_array('ROLE_CONDUCTEUR', $newRoles)) {
-
-            // Ajoute les rôles ROLE_CONDUCTEUR et ROLE_PASSAGE à l'utilisateur
-            $user->setRoles([ 'ROLE_CONDUCTEUR' , "ROLE_USER"]);
-            
-            $this->entityManager->flush(); // Sauvegarde les modifications
-
-            return new JsonResponse(['message' => 'Roles updated successfully']);
-        }
-
-        return new JsonResponse(['error' => 'Invalid role or missing role'], Response::HTTP_BAD_REQUEST);
-    }
-
-    #[Route('/user/update-role/2roles/{id}', name: 'update_user_role', methods: ['POST'])]
-    public function updateRoleAll(Request $request, UserRepository $userRepository, User $user): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-
-        // Vérifiez si le rôle est valide
-        $newRoles = $data['role'] ?? null;
-        
-        if ($newRoles && is_array($newRoles) && 
-            in_array('ROLE_CONDUCTEUR', $newRoles) && 
-            in_array('ROLE_PASSAGE', $newRoles)) {
-
-            // Ajoute les rôles ROLE_CONDUCTEUR et ROLE_PASSAGE à l'utilisateur
-            $user->setRoles(['ROLE_CONDUCTEUR', 'ROLE_PASSAGE' , "ROLE_USER"]);
-            
-            $this->entityManager->flush(); // Sauvegarde les modifications
-
-            return new JsonResponse(['message' => 'Roles updated successfully']);
+                $this->entityManager->flush(); // Sauvegarde les modifications
+                return new JsonResponse(['message' => 'Roles updated successfully']);
+            }
         }
 
         return new JsonResponse(['error' => 'Invalid roles or missing roles'], Response::HTTP_BAD_REQUEST);
     }
-
 }

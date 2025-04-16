@@ -33,7 +33,7 @@ final class VueController extends AbstractController
        
         if ($covoiturages) {
 
-            $conducteur = $covoiturages->getConducteur(); // Supposons qu'il y ait une relation définie dans l'entité Covoiturage
+            $conducteur = $covoiturages->getConducteur(); 
             $prenomConducteur = $conducteur ? $conducteur->getPseudo() : null; 
     
             $vehicule = $covoiturages->getVoiture();

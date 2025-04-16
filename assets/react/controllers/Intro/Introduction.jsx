@@ -1,7 +1,7 @@
 import React from 'react';
-import "./intro.css";
+import "./introduction.css";
 
-function Intro() {
+function Introduction() {
   return (
     
     <div class="containerIntro">
@@ -67,4 +67,4 @@ function Intro() {
   );
 }
 
-export default Intro;
+export default Introduction;

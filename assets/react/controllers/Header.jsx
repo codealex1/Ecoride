@@ -1,4 +1,4 @@
-import { AppBar,  Grid, Toolbar, Button } from "@mui/material";
+import { AppBar,  Grid2, Toolbar, Button } from "@mui/material";
 import React , { useEffect, useState } from "react";
 
 
@@ -20,19 +20,19 @@ export default function Header() {
     return (
         <AppBar position="static">
             <Toolbar style={{ background: '#538460' }}>
-                <Grid container justifyContent="space-between" alignItems="center" style={{ width:'100%' }} >
+                <Grid2 container justifyContent="space-between" alignItems="center" style={{ width:'100%' }} >
                     
-                    <Grid item>
+                    <Grid2 item>
                         <nav className="flex gap-8 text-white font-medium">
                             <a href="/" className="hover:text-gray-200">Accueil</a>
                             <a href="/contact" className="hover:text-gray-200">Contact</a>
                             <a href="/covoiturages" className="hover:text-gray-200">Covoiturages</a>
 
                         </nav>
-                    </Grid>
+                    </Grid2>
 
                     {/* Section droite : Boutons Connexion et S'inscrire */}
-                    <Grid item>
+                    <Grid2 item>
                         <div className="flex gap-4">
                             {/* Boutons pour la connexion et l'inscription */}
                             <Button
@@ -77,12 +77,12 @@ export default function Header() {
                             </Button>
                             )}
                         </div>
-                    </Grid>
+                    </Grid2>
                     
                     
 
 
-                </Grid>
+                </Grid2>
             </Toolbar>
         </AppBar>
     )

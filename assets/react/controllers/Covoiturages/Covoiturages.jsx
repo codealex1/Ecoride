@@ -45,7 +45,7 @@ function Covoiturages() {
 
     return (
         <div>
-            <img className='imgBack' src="./images/cartefond.png" alt="carte" />
+            <img className='imgBack' src="./images/cartefond.png" alt="carte2S" />
             <h1 className='h1-search-co '><strong>Trouvez votre itinéraire rapidement !</strong></h1>
             <div className="search-bar-co search-bar">
                 <input
@@ -97,7 +97,7 @@ function Covoiturages() {
                             <span>Écologique (voiture électrique)</span>
                         </label>
                     </div>
-
+                
                     <div className="results-container">
                         {filteredResults.map((ride) => (
                             <div className="ride-card" key={ride.id}>

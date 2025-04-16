@@ -52,33 +52,34 @@ function SearchBar() {
                 />
                 <button onClick={handleSearch}>Rechercher</button>
             </div>
-
+        {results.length === 0 && (
+                <p className="no-results">🚫 Aucun covoiturage trouvé pour cette recherche.</p>
+        )}
            {results.length > 0 && (
-    <div>
-        
-        <div className="results-container">
-            {results.map((ride) => (
-                <div className="ride-card" key={ride.id}>
-                    <h1><strong>{ride.trajet}</strong></h1>
-                    <p>
-                        <strong>Départ:</strong> {ride.lieu_depart} le {formatDate(ride.date_depart?.date)} à {ride.heure_depart}
-                    </p>
-                    <p>
-                        <strong>Arrivée:</strong> {ride.lieu_arrivee} le {formatDate(ride.date_arrivee?.date)} à {ride.heure_arrivee}
-                    </p>
-                    <p>
-                        <strong>Durée:</strong> {ride.duree} heures
-                    </p>
-                    <p>
-                        <strong>Places disponibles:</strong> {ride.nb_place}
-                    </p>
-                    <p>
-                        <strong>Prix par personne:</strong> {ride.prix_personne} €
-                    </p>
-                    <button className="contact-button" ><a href={`/covoiturages`}>En savoir plus</a> </button>
-                </div>
-            ))}
-        </div>
+        <div>
+            <div className="results-container">
+                {results.map((ride) => (
+                    <div className="ride-card" key={ride.id}>
+                        <h1><strong>{ride.trajet}</strong></h1>
+                        <p>
+                            <strong>Départ:</strong> {ride.lieu_depart} le {formatDate(ride.date_depart?.date)} à {ride.heure_depart}
+                        </p>
+                        <p>
+                            <strong>Arrivée:</strong> {ride.lieu_arrivee} le {formatDate(ride.date_arrivee?.date)} à {ride.heure_arrivee}
+                        </p>
+                        <p>
+                            <strong>Durée:</strong> {ride.duree} heures
+                        </p>
+                        <p>
+                            <strong>Places disponibles:</strong> {ride.nb_place}
+                        </p>
+                        <p>
+                            <strong>Prix par personne:</strong> {ride.prix_personne} €
+                        </p>
+                        <button className="contact-button" ><a href={`/covoiturages`}>En savoir plus</a> </button>
+                    </div>
+                ))}
+            </div>
     </div>
 )}
 

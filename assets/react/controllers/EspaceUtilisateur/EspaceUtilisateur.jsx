@@ -47,153 +47,85 @@ function EspaceUtilisateur() {
   };
 
 
-  const handlePassage = async () => {
-    if (!user || !user.id) {
-      setMessage("Utilisateur non valide ou ID manquant.");
-      return;
-    }
-
+  const handleFetch = async (url, method, body) => {
     try {
-      const response = await fetch(
-        `/user/update-role/${user.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ role: ["ROLE_PASSAGE" , "ROLE_USER"] }),
-        }
-      );
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
 
       if (response.ok) {
-        setMessage("Rôle mis à jour avec succès !");
+        return await response.json();
       } else {
         const error = await response.json();
-        setMessage(`Erreur : ${error.error}`);
+        throw new Error(error.error);
       }
     } catch (err) {
-      setMessage("Une erreur est survenue lors de la mise à jour du rôle.");
-      console.error(err);
-    }
-  };
-  const handleConduteur = async () => {
-    if (!user || !user.id) {
-      setMessage("Utilisateur non valide ou ID manquant.");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `/user/update-role/conducteur${user.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ role: ["ROLE_CONDUCTEUR" , "ROLE_PASSAGE" , "ROLE_USER"] }),
-        }
-      );
-
-      if (response.ok) {
-        setMessage("Rôle mis à jour avec succès !");
-      } else {
-        const error = await response.json();
-        setMessage(`Erreur : ${error.error}`);
-      }
-    } catch (err) {
-      setMessage("Une erreur est survenue lors de la mise à jour du rôle.");
+      setMessage(`Erreur : ${err.message}`);
       console.error(err);
     }
   };
 
+    
 
-  const handleConducteurPassage = async () => {
+  const handleRoleUpdate = async (newRoles) => {
     if (!user || !user.id) {
       setMessage("Utilisateur non valide ou ID manquant.");
       return;
     }
-
-    try {
-      const response = await fetch(
-        `/user/update-role/2roles/${user.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ role: ["ROLE_CONDUCTEUR" , "ROLE_PASSAGE" , "ROLE_USER"] }),
-        }
-      );
-
-      if (response.ok) {
-        setMessage("Rôle mis à jour avec succès !");
-      } else {
-        const error = await response.json();
-        setMessage(`Erreur : ${error.error}`);
-      }
-    } catch (err) {
-      setMessage("Une erreur est survenue lors de la mise à jour du rôle.");
-      console.error(err);
-    }
-  };
   
+    const currentRoles = user.roles || []; // Récupérer les rôles existants
+    const updatedRoles = Array.from(new Set([...currentRoles, ...newRoles])); // Ajouter les nouveaux rôles sans doublons
+  
+    const url = `/user/update-role/${user.id}`;
+    const body = { role: updatedRoles };
+    const result = await handleFetch(url, 'POST', body);
+  
+    if (result) {
+      setMessage("Rôle mis à jour avec succès !");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Préparer les données à envoyer
     const formData = {
       immatriculation,
       date_premiere_imma,
       modele,
-      energie, 
+      energie,
       marque_id: marque,
       couleur,
       nb_place: parseInt(nb_place, 10),
-      proprietaire_id: user.id, //  l'ID du propriétaire connecté (à gérer dynamiquement)
+      proprietaire_id: user.id,
     };
 
-    try {
-      // Envoi des données au contrôleur via une requête POST
-      const response = await fetch('/api/voiture/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        window.location.reload();
-        const result = await response.json();
-        setMessage(`Voiture ajoutée avec succès ! ID: ${result.voiture_id}`);
-      } else {
-        const error = await response.json();
-        setMessage(`Erreur : ${error.error}`);
-      }
-    } catch (err) {
-      setMessage('Une erreur est survenue lors de la soumission du formulaire.');
-      console.error(err);
+    const result = await handleFetch('/api/voiture/add', 'POST', formData);
+    if (result) {
+      setMessage(`Voiture ajoutée avec succès ! ID: ${result.voiture_id}`);
+      window.location.reload();
     }
+  };
+
+  const handleFormPassage = async (e) => {
+    e.preventDefault();
+    await handleRoleUpdate(role === 'conducteur' ? ["ROLE_CONDUCTEUR", "ROLE_USER"] : ["ROLE_PASSAGE", "ROLE_USER"]);
+    
   };
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-  
-    // Appeler handlePassage pour changer le rôle de l'utilisateur
-    await handleConduteur();
-  
-    // Ensuite, appeler handleSubmit pour soumettre les données du formulaire
+    await handleRoleUpdate(role === 'conducteur' ? ["ROLE_CONDUCTEUR", "ROLE_USER"] : ["ROLE_PASSAGE", "ROLE_USER"]);
     await handleSubmit(e);
   };
   const handleFormSubmit2roles = async (e) => {
     e.preventDefault();
-  
-    // Appeler handlePassage pour changer le rôle de l'utilisateur
-    await handleConducteurPassage();
-    
-    // Ensuite, appeler handleSubmit pour soumettre les données du formulaire
+    await handleRoleUpdate(role === 'conducteur/passage' ? ["ROLE_CONDUCTEUR", "ROLE_USER" , "ROLE_PASSAGE"] : ["ROLE_PASSAGE", "ROLE_USER"]);
     await handleSubmit(e);
   };
+
   
 
 
@@ -277,7 +209,7 @@ function EspaceUtilisateur() {
       </div>
       {role === 'passager' && (
         <div>
-          <form onSubmit={handlePassage}>
+          <form onSubmit={handleFormPassage} className="bg-white p-4 rounded shadow-md">
             <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded ml-32">
               Sélectionnez le rôle
             </button>
@@ -286,7 +218,7 @@ function EspaceUtilisateur() {
       )}
       {role === 'conducteur/passage' && (
         <div>
-          <form onSubmit={handleFormSubmit2roles } className="bg-white p-4 rounded shadow-md">
+          <form onSubmit={handleFormSubmit2roles} className="bg-white p-4 rounded shadow-md">
           <h2 className="text-xl font-semibold mb-4">Informations du véhicule</h2>
           <div className="mb-4">
             <label className="block mb-1">Plaque d’immatriculation</label>

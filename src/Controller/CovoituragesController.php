@@ -125,7 +125,7 @@ final class CovoituragesController extends AbstractController
     #[Route('/add', name: 'add', methods: ['POST'])]
     public function add(Request $request, UserRepository $userRepository, VoitureRepository $voitureRepository): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $data = \json_decode($request->getContent(), true);
 
         if (!$data) {
             return new JsonResponse(['error' => 'Données invalides'], JsonResponse::HTTP_BAD_REQUEST);
